@@ -6,19 +6,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+/*
+    @PostMapping gère les requêtes HTTP de type post
+    @GetMapping gère les requêtes HTTP de type post
+    @PutMapping gère les requêtes HTTP de type put
+    @DeleteMapping gère les requêtes HTTP de type Delete
+    @RequestBody mappe le corps HttpRequest à un objet de transfert
+    @PathVariable //disposition des parametre
+    un type List est garanti être un Iterable mais un type  Iterable peut ne pas être un List
+*/
+
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/test")
 public class RoleController {
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public String userAccess(){
-        return "User Content.";
+        return "Contenu de l'Utilisateur.";
     }
 
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminAccess(){
-        return "Admin Board.";
+        return "Tableau de l'Admin.";
     }
 }

@@ -12,6 +12,8 @@ import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.security.jwt.JwtUtils;
 import com.sy.backEndApiAkilina.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -51,18 +53,30 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        //String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(new JwtResponse(jwt,
+
+        /*return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getNumero(),
                 userDetails.getEmail(),
-                roles));
+                roles));*/
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(new JwtResponse(userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getNumero(),
+                        userDetails.getEmail(),
+                        roles));
     }
 
     @PostMapping("signup")
@@ -87,23 +101,29 @@ public class AuthController {
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
+        //VERIFICATION DU ROLE ENTREZ PAR L'UTILISATEUR
+        //SI C'EST NULL ON AFFECTE DIRECTEMENT LE ROLE USER A CE COLLABORATEUR
+        //SINON RECUPERE C'EST DIFFERENT ROLE ET ON VERIFIE SI CA EXISTE DANS LA BASE DE DONNEE
+        // DANS LE CAS CONTRAIRE ON AFFECTE LE ROLE USER A CE COLLABORATEUR
+
+
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN);
-                  //  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER);
+                 //  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
         strRoles.forEach(role ->{
             switch (role){
                 case "admin":
                 Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN);
-                       // .orElseThrow(() -> new RuntimeException("Error: Role n'existe pas."));
+                        // .orElseThrow(() -> new RuntimeException("Error: Role n'existe pas."));
                 roles.add(adminRole);
 
                 break;
 
                 default:
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER);
-                          //  .orElseThrow(() -> new RuntimeException("Erreur: Role n'existe pas"));
+                        // .orElseThrow(() -> new RuntimeException("Erreur: Role n'existe pas"));
                     roles.add(userRole);
             }
         });
@@ -112,6 +132,13 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> logoutUser() {
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new MessageResponse("Vous avez été déconnecté!"));
     }
 
 }
