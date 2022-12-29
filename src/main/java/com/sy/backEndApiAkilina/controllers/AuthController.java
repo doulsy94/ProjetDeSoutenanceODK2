@@ -11,6 +11,8 @@ import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.security.jwt.JwtUtils;
 import com.sy.backEndApiAkilina.serviceImpl.UserDetailsImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -27,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Api(value = "authentification", description = "Inscription et connexion des users")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
@@ -48,6 +52,7 @@ public class AuthController {
     JwtUtils jwtUtils;
 
 
+    @ApiOperation(value = "Connexion de l'utilisateur")
     @PostMapping("signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest ){
         Authentication authentication = authenticationManager.authenticate(
@@ -79,6 +84,7 @@ public class AuthController {
                         roles));
     }
 
+    @ApiOperation(value = "Creation de compte de l'utilisateur")
     @PostMapping("signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest ) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
@@ -134,6 +140,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
     }
 
+    @ApiOperation(value = "Déconnexion de l'utilisateur")
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();

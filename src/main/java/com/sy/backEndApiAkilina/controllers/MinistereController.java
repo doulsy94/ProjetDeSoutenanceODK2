@@ -49,7 +49,7 @@ public class MinistereController {
         return ministereService.read();
     }
 
-    @ApiOperation(value = "LIRE MINISTERE")
+    @ApiOperation(value = "LIRE MINISTERE Par libelle")
     @GetMapping("/lire_ministere/{libelle}")
     public Ministere readMinistereParLibelle(@PathVariable("libelle") String libelle) {
         return ministereRepository.findByLibelle(libelle);

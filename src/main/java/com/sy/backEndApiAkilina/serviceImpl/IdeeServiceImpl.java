@@ -1,6 +1,5 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
-import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;

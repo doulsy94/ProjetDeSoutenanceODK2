@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.controllers;
 
+import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
     @PathVariable //disposition des parametre
     un type List est garanti être un Iterable mais un type  Iterable peut ne pas être un List
 */
+
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController

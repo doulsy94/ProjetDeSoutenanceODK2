@@ -39,7 +39,7 @@ public class CommentaireServiceImpl implements CommentaireService {
     }
 
     @Override
-    public String delete1(Long id_commentaire) {
+    public String delete(Long id_commentaire) {
         commentaireRepository.deleteById(id_commentaire);
         return "Commentaire supprimé avec succès";
     }
