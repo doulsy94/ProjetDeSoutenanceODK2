@@ -1,7 +1,6 @@
 package com.sy.backEndApiAkilina.models;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -19,8 +18,8 @@ uniqueConstraints = {
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "id_user", nullable = false)
+    private Long id_user;
 
     @NotBlank
     @Size(max = 20)
@@ -38,11 +37,12 @@ public class User {
     @Size(max=120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+   @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
 
     public User(){
 
@@ -54,11 +54,11 @@ public class User {
         this.numero = numero;
         this.password = password;
     }
-    public Long getId() {
-        return id;
+    public Long getId_user() {
+        return id_user;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_user(Long id) {
+        this.id_user = id_user;
     }
     public String getUsername() {
         return username;

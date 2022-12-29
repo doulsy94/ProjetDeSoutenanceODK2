@@ -1,6 +1,6 @@
 package com.sy.backEndApiAkilina.security.jwt;
 
-import com.sy.backEndApiAkilina.security.services.UserDetailsImpl;
+import com.sy.backEndApiAkilina.serviceImpl.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

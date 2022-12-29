@@ -2,7 +2,7 @@ package com.sy.backEndApiAkilina.security;
 
 import com.sy.backEndApiAkilina.security.jwt.AuthEntryPointJwt;
 import com.sy.backEndApiAkilina.security.jwt.AuthTokenFilter;
-import com.sy.backEndApiAkilina.security.services.UserDetailsServiceImpl;
+import com.sy.backEndApiAkilina.serviceImpl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

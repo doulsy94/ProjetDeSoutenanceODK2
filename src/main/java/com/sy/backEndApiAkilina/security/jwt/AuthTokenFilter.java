@@ -1,6 +1,6 @@
 package com.sy.backEndApiAkilina.security.jwt;
 
-import com.sy.backEndApiAkilina.security.services.UserDetailsServiceImpl;
+import com.sy.backEndApiAkilina.serviceImpl.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

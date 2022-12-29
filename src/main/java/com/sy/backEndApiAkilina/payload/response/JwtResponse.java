@@ -6,15 +6,15 @@ public class JwtResponse {
 
     private String token;
     private String type = "Bearer";
-    private Long id;
+    private Long id_user;
     private String username;
     private String email;
 
     private String numero;
     private List<String> roles;
-    public JwtResponse(Long id, String username, String numero, String email, List<String> roles){
+    public JwtResponse(Long id_user, String username, String numero, String email, List<String> roles){
 
-        this.id = id;
+        this.id_user = id_user;
         this.username = username;
         this.email = email;
         this.numero = numero;
@@ -37,12 +37,12 @@ public class JwtResponse {
         this.type = tokenType;
     }
 
-    public Long getId() {
-        return id;
+    public Long getId_user() {
+        return id_user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_user(Long id) {
+        this.id_user = id;
     }
 
     public String getNumero() {

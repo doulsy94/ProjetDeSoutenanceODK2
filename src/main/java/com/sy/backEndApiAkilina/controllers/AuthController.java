@@ -10,7 +10,7 @@ import com.sy.backEndApiAkilina.payload.response.MessageResponse;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.security.jwt.JwtUtils;
-import com.sy.backEndApiAkilina.security.services.UserDetailsImpl;
+import com.sy.backEndApiAkilina.serviceImpl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -72,7 +72,7 @@ public class AuthController {
                 roles));*/
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new JwtResponse(userDetails.getId(),
+                .body(new JwtResponse(userDetails.getId_user(),
                         userDetails.getUsername(),
                         userDetails.getNumero(),
                         userDetails.getEmail(),

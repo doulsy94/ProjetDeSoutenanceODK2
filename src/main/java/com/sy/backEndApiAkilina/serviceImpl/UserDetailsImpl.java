@@ -1,4 +1,4 @@
-package com.sy.backEndApiAkilina.security.services;
+package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.User;
 import net.minidev.json.annotate.JsonIgnore;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails{
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long id_user;
 
     private String username;
 
@@ -28,9 +28,9 @@ public class UserDetailsImpl implements UserDetails{
 
     public Collection<? extends GrantedAuthority> authorities ;
 
-    public UserDetailsImpl(Long id, String username, String email, String numero, String password,
+    public UserDetailsImpl(Long id_user, String username, String email, String numero, String password,
                            Collection<? extends GrantedAuthority> authorities){
-        this.id = id;
+        this.id_user = id_user;
         this.username = username;
         this.email = email;
         this.numero = numero;
@@ -45,7 +45,7 @@ public class UserDetailsImpl implements UserDetails{
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
-                user.getId(),
+                user.getId_user(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getNumero(),
@@ -58,8 +58,8 @@ public class UserDetailsImpl implements UserDetails{
         return authorities;
     }
 
-    public Long getId(){
-        return id;
+    public Long getId_user(){
+        return id_user;
     }
 
     public String getEmail(){
@@ -107,6 +107,6 @@ public class UserDetailsImpl implements UserDetails{
         if (o == null || getClass() != o.getClass())
             return false;
         UserDetailsImpl user = (UserDetailsImpl) o;
-        return Objects.equals(id, user.id);
+        return Objects.equals(id_user, user.id_user);
     }
 }
