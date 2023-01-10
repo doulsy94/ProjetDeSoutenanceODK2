@@ -5,17 +5,18 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
 
     @NotBlank
-    private String username;
+    private String emailOrNumero;
+
 
     @NotBlank
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getEmailOrNumero() {
+        return emailOrNumero;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmailOrNumero(String emailOrNumero) {
+        this.emailOrNumero = emailOrNumero;
     }
 
     public String getPassword() {

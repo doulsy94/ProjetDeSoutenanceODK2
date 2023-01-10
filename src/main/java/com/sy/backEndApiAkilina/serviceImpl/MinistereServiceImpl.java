@@ -40,7 +40,7 @@ public class MinistereServiceImpl implements MinistereService {
     }
 
     @Override
-    public Ministere trouverMinistereParId(String libelle) {
+    public Ministere trouverMinistereParLibelle(String libelle) {
         return ministereRepository.findByLibelle(libelle);
     }
 

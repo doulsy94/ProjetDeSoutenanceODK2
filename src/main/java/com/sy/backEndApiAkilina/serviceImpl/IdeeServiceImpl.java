@@ -5,9 +5,12 @@ import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
+import com.sy.backEndApiAkilina.security.services.MotFilterService;
+import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
@@ -15,11 +18,21 @@ import java.util.List;
 @Service
 public class IdeeServiceImpl implements IdeeService {
     private final IdeeRepository ideeRepository;
+
+    private final WordFilterService wordFilterService;
+
     private final MinistereRepository ministereRepository;
 
     @Override
-    public Idee add(Idee idee) {
-        return ideeRepository.save(idee);
+    public String add(Idee idee) {
+        String filteredContent = wordFilterService.filterIdee(idee.getContenu_idee());
+        if(!filteredContent.equals(idee.getContenu_idee()))
+            return filteredContent;
+        // return "S'il vous plaît utilisez des mots appropriés, les gros mots ne sont pas autorisés";
+        idee.setContenu_idee(filteredContent);
+        idee.setDate(new Date());
+        ideeRepository.save(idee);
+        return "Idee ajouté avec succès";
     }
 
     @Override

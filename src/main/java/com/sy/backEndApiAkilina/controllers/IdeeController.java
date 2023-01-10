@@ -1,16 +1,21 @@
 package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
+import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
+import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 
 @Api(value = "idee", description = "MANIPULATION DES DONNEES DE LA TABLE IDEE")
@@ -20,18 +25,23 @@ import java.util.List;
 public class IdeeController {
 
 
-    final private IdeeService ideeService;
+     private final IdeeService ideeService;
 
-    final private CommentaireService commentaireService;
+     private final CommentaireService commentaireService;
 
     private final MinistereRepository ministereRepository;
     private final IdeeRepository ideeRepository;
     private final CommentaireRepository commentaireRepository;
+    private final UserRepository userRepository;
+
+    private final WordFilterService wordFilterService;
 
     @ApiOperation(value = "Ajout d'idée")
     @PostMapping("/ajouter_idee")
-    public Idee add(@RequestBody Idee idee){
-        return ideeService.add(idee);
+
+    public String add(@RequestBody Idee idee) {
+        return wordFilterService.filterIdee(idee.getContenu_idee());
+
     }
 
     // Liste = read = lecture

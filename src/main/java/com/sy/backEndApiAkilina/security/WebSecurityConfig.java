@@ -21,7 +21,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    private static final String[] AUTH_WHITE_LIST = {
+    private static final String[] abdoulaye = {
+            "/api/auth/**",
+            // -- Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            // -- Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            // other public endpoints of your API may be appended to this array "/api/auth/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/v2/api-docs/**",
@@ -62,8 +75,14 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/test/**").permitAll()
+                .authorizeRequests().antMatchers(abdoulaye).permitAll()
+                .antMatchers("/api/test/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/ministere/**").permitAll()
+                .antMatchers("/api/idee/**").permitAll()
+                .antMatchers("/api/commentaire/**").permitAll()
+                .antMatchers("/api/vocal/**").permitAll()
+                .antMatchers("/api/notification/**").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin();

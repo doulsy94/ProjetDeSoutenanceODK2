@@ -5,10 +5,12 @@ import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
+import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
@@ -17,11 +19,19 @@ import java.util.List;
 
 public class CommentaireServiceImpl implements CommentaireService {
     private final CommentaireRepository commentaireRepository;
+
+    private final WordFilterService wordFilterService;
     private final IdeeRepository ideeRepository;
 
     @Override
-    public Commentaire add(Commentaire commentaire) {
-        return commentaireRepository.save(commentaire);
+    public String add(Commentaire commentaire) {
+        String filteredContent = wordFilterService.filterCommentaire(commentaire.getContenu_commentaire());
+        if(!filteredContent.equals(commentaire.getContenu_commentaire()))
+            return filteredContent;
+        // return "S'il vous plaît utilisez des mots appropriés, les gros mots ne sont pas autorisés";
+        commentaire.setContenu_commentaire(filteredContent);
+        commentaireRepository.save(commentaire);
+        return "Commentaire ajouté avec succès";
     }
 
     @Override

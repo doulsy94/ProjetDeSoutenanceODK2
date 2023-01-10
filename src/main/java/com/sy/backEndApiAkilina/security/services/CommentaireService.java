@@ -8,7 +8,7 @@ import java.util.List;
 public interface CommentaireService {
 
     //methode permettant d'ajouter un commentaire en fonction d'un idée
-    Commentaire add(Commentaire commentaire);
+    String add(Commentaire commentaire);
 
     //methode permettant de lire commentaire
     List<Commentaire> read();

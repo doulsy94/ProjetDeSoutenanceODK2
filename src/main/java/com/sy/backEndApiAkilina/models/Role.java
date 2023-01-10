@@ -1,5 +1,7 @@
 package com.sy.backEndApiAkilina.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity

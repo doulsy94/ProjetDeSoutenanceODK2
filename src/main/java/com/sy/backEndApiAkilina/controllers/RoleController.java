@@ -1,6 +1,5 @@
 package com.sy.backEndApiAkilina.controllers;
 
-import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,5 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
-import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.Vocal;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
@@ -20,9 +19,14 @@ public class VocalServiceImpl implements VocalService {
 
     private final MinistereRepository ministereRepository;
 
-    @Override
+   /* @Override
     public Vocal add(Vocal vocal) {
         return vocalRepository.save(vocal);
+    }*/
+
+    @Override
+    public void add(byte[] vocal_contenu) {
+
     }
 
     @Override

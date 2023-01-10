@@ -1,7 +1,14 @@
 package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.models.Commentaire;
+import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.User;
+import com.sy.backEndApiAkilina.repository.CommentaireRepository;
+import com.sy.backEndApiAkilina.repository.IdeeRepository;
+import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
+import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -17,12 +24,20 @@ import java.util.List;
 public class CommentaireController {
 
     @Autowired
-    final private CommentaireService commentaireService;
+     private final CommentaireService commentaireService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private IdeeRepository ideeRepository;
+    private CommentaireRepository commentaireRepository;
+
+    private final WordFilterService wordFilterService;
 
     @ApiOperation(value = "Ajout de commentaire")
     @PostMapping("/ajouter_commentaire")
-    public Commentaire add(@RequestBody Commentaire commentaire){
-        return commentaireService.add(commentaire);
+    public String add(@RequestBody Commentaire commentaire) {
+        return wordFilterService.filterCommentaire(commentaire.getContenu_commentaire());
+
     }
 
     @ApiOperation(value = "Modification des commentaires par id")

@@ -17,5 +17,5 @@ public interface MinistereService {
     //methode permettant de de supprimer une region
     String delete(Long id_ministere);
 
-    Ministere trouverMinistereParId(String libelle);
+    Ministere trouverMinistereParLibelle(String libelle);
 }

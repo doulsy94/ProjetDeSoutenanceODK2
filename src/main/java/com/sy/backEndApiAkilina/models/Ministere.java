@@ -19,6 +19,8 @@ public class Ministere {
     @Column(unique = true)
     private String libelle;
 
+    private String description;
+
     private String image;
 
     @ManyToOne

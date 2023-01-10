@@ -9,7 +9,9 @@ import java.util.List;
 public interface VocalService {
 
     //methode permettant d'ajouter un vocal
-    Vocal add(Vocal vocal);
+  //  Vocal add(Vocal vocal);
+
+    void add(byte[] vocal_contenu);
 
     List<Vocal> read();
 

@@ -16,9 +16,17 @@ public class Vocal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_vocal;
 
-    private String contenu_vocal;
+    private byte[] contenu_vocal;
+
+    public Vocal(byte[] contenu_vocal){
+        this.contenu_vocal = contenu_vocal;
+    }
 
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User id_user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_ministere")
+    private Ministere id_ministere;
 }

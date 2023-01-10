@@ -54,9 +54,9 @@ public class AuthController {
 
     @ApiOperation(value = "Connexion de l'utilisateur")
     @PostMapping("signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest ){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmailOrNumero(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //String jwt = jwtUtils.generateJwtToken(authentication);
@@ -86,7 +86,7 @@ public class AuthController {
 
     @ApiOperation(value = "Creation de compte de l'utilisateur")
     @PostMapping("signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest ) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -97,48 +97,59 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Erreur: L'Email existe déjà"));
         }
-
-        // Creation d'un nouveau user
-        User user = new User(signupRequest.getUsername(),
-                signupRequest.getEmail(),
-                signupRequest.getNumero(),
-                encoder.encode(signupRequest.getPassword()));
-
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        //VERIFICATION DU ROLE ENTREZ PAR L'UTILISATEUR
-        //SI C'EST NULL ON AFFECTE DIRECTEMENT LE ROLE USER A CE COLLABORATEUR
-        //SINON RECUPERE C'EST DIFFERENT ROLE ET ON VERIFIE SI CA EXISTE DANS LA BASE DE DONNEE
-        // DANS LE CAS CONTRAIRE ON AFFECTE LE ROLE USER A CE COLLABORATEUR
-
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER);
-                 //  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-        strRoles.forEach(role ->{
-            switch (role){
-                case "admin":
-                Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN);
-                        // .orElseThrow(() -> new RuntimeException("Error: Role n'existe pas."));
-                roles.add(adminRole);
-
-                break;
-
-                default:
-                    Role userRole = roleRepository.findByName(ERole.ROLE_USER);
-                        // .orElseThrow(() -> new RuntimeException("Erreur: Role n'existe pas"));
-                    roles.add(userRole);
-            }
-        });
+        if (userRepository.existsByNumero(signupRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Erreur: Le numero existe déjà"));
         }
-        user.setRoles(roles);
-        userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
+        if (signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+            User user = new User(signupRequest.getUsername(),
+                    signupRequest.getEmail(),
+                    signupRequest.getNumero(),
+                    encoder.encode(signupRequest.getPassword()),
+                    encoder.encode(signupRequest.getConfirmPassword()));
+
+            Set<String> strRoles = signupRequest.getRole();
+            Set<Role> roles = new HashSet<>();
+
+            //VERIFICATION DU ROLE ENTREZ PAR L'UTILISATEUR
+            //SI C'EST NULL ON AFFECTE DIRECTEMENT LE ROLE USER A CE COLLABORATEUR
+            //SINON RECUPERE C'EST DIFFERENT ROLE ET ON VERIFIE SI CA EXISTE DANS LA BASE DE DONNEE
+            // DANS LE CAS CONTRAIRE ON AFFECTE LE ROLE USER A CE COLLABORATEUR
+
+
+            if (strRoles == null) {
+                Role userRole = roleRepository.findByName(ERole.ROLE_USER);
+                //  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(userRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "admin":
+                            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN);
+                            // .orElseThrow(() -> new RuntimeException("Error: Role n'existe pas."));
+                            roles.add(adminRole);
+
+                            break;
+
+                        default:
+                            Role userRole = roleRepository.findByName(ERole.ROLE_USER);
+                            // .orElseThrow(() -> new RuntimeException("Erreur: Role n'existe pas"));
+                            roles.add(userRole);
+                    }
+                });
+            }
+            user.setRoles(roles);
+            userRepository.save(user);
+
+            return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("Verifier les mots de passe "));
+        }
     }
+
+   // Creation d'un nouveau user
 
     @ApiOperation(value = "Déconnexion de l'utilisateur")
     @PostMapping("/signout")

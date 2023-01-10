@@ -2,8 +2,13 @@ package com.sy.backEndApiAkilina.controllers;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sy.backEndApiAkilina.configuration.SaveImage;
+import com.sy.backEndApiAkilina.models.ERole;
 import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.Role;
+import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
+import com.sy.backEndApiAkilina.repository.RoleRepository;
+import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.MinistereService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,18 +30,25 @@ public class MinistereController {
 
     @Autowired
     private MinistereRepository ministereRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @ApiOperation(value = "AJOUT DES DONNEES DANS LA TABLE MINISTERE")
     @PostMapping("/ajout_ministere")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Object create(@RequestParam(value = "ministere") String minis,
+    //@PreAuthorize("hasRole('ADMIN')")
+    public Object add(@RequestParam(value = "ministere") String minis,
                          @RequestParam(value = "file", required = true) MultipartFile file) {
+        Role role = roleRepository.findByName(ERole.ROLE_ADMIN);
+        User admin = userRepository.findByRoles(role);
         try {
             Ministere ministere = new JsonMapper().readValue(minis, Ministere.class);
             if (file != null) {
                 System.out.println("ggggg");
                 ministere.setImage(SaveImage.save("minstere", file, ministere.getLibelle()));
             }
+            ministere.setId_user(admin);
             return ministereService.add(ministere);
 
         } catch (Exception e) {
