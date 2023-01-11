@@ -37,28 +37,32 @@ public class IdeeController {
     private final WordFilterService wordFilterService;
 
     @ApiOperation(value = "Ajout d'idée")
-    @PostMapping("/ajouter_idee")
+    @PostMapping("/ajouter/{id_user}/{id_ministere}")
 
-    public String add(@RequestBody Idee idee) {
-        return wordFilterService.filterIdee(idee.getContenu_idee());
+    public String add(@RequestBody Idee idee,@PathVariable("id_user") User user, @PathVariable("id_ministere") Ministere ministere) {
+
+        idee.setId_user(user);
+        idee.setId_ministere(ministere);
+
+        return ideeService.add(idee, user, ministere);
 
     }
 
     // Liste = read = lecture
     @ApiOperation(value = "Lire idée de l'utilisateur")
-    @GetMapping("/lire_idee")
+    @GetMapping("/lire")
     public List<Idee> read() {
         return ideeService.read();
     }
 
     @ApiOperation(value = "Modifier idée de l'utilisateur")
-    @PutMapping("/modifier_idee/{id_idee}")
+    @PutMapping("/modifier/{id_idee}")
     public Idee update(@PathVariable Long id_idee, @RequestBody Idee idee){
         return ideeService.update(id_idee, idee);
     }
 
     @ApiOperation(value = "Supprimer idée de l'utilisateur")
-    @DeleteMapping("/suprimer_idee/{id_idee}")
+    @DeleteMapping("/suprimer/{id_idee}")
     public String delete(@PathVariable Long id_idee){
         return this.ideeService.delete(id_idee);
     }

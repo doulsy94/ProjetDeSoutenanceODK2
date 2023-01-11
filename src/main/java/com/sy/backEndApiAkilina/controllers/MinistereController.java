@@ -36,7 +36,7 @@ public class MinistereController {
     private RoleRepository roleRepository;
 
     @ApiOperation(value = "AJOUT DES DONNEES DANS LA TABLE MINISTERE")
-    @PostMapping("/ajout_ministere")
+    @PostMapping("/ajouter")
     //@PreAuthorize("hasRole('ADMIN')")
     public Object add(@RequestParam(value = "ministere") String minis,
                          @RequestParam(value = "file", required = true) MultipartFile file) {
@@ -56,7 +56,7 @@ public class MinistereController {
         }
     }
     @ApiOperation(value = "LIRE MINISTERE")
-    @GetMapping("/lire_ministere")
+    @GetMapping("/lire")
     public List<Ministere> read() {
         return ministereService.read();
     }
@@ -68,10 +68,10 @@ public class MinistereController {
     }
 
     @ApiOperation(value = "MODIFICATION DES DONNEES DE LA TABLE MINISTERE")
-    @PutMapping("/modifier_ministere/{id_ministere}")
+    @PutMapping("/modifier/{id_ministere}")
     public Object update(@PathVariable Long id_ministere,
                          @RequestParam(value = "ministere") String minis,
-                         @RequestParam(value = "file", required = true) MultipartFile file
+                         @RequestParam(value = "file", required = false) MultipartFile file
     ) {
         try {
             Ministere ministere = new JsonMapper().readValue(minis, Ministere.class);
@@ -87,7 +87,7 @@ public class MinistereController {
     }
 
     @ApiOperation(value = "SUPPRESION DES DONNEE DANS LA TABLE MINISTERE")
-    @DeleteMapping("/supprimer_ministere/{id_ministere}")
+    @DeleteMapping("/supprimer/{id_ministere}")
     public String delete(@PathVariable Long id_ministere) {
         return ministereService.delete(id_ministere);
     }

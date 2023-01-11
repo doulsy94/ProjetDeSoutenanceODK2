@@ -23,7 +23,7 @@ public class Ministere {
 
     private String image;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user")
     private User id_user;
 }

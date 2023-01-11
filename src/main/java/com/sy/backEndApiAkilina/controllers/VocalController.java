@@ -36,7 +36,7 @@ public class VocalController {
     }*/
 
     @ApiOperation(value = "Ajout de vocal")
-    @PostMapping("/ajouter_vocal")
+    @PostMapping("/ajouter")
     public void add(@RequestParam("vocal_contenu") String voc,
                                  @RequestParam("fichier") MultipartFile fichier) throws IOException {
         //==================Commentaires=======================
@@ -56,13 +56,13 @@ public class VocalController {
     }
 
     @ApiOperation(value = "Lire vocal de l'utilisateur")
-    @GetMapping("/lire_vocal")
+    @GetMapping("/lire")
     public List<Vocal> read() {
         return vocalService.read();
     }
 
     @ApiOperation(value = "Supprimer vocal")
-    @DeleteMapping("/suprimer_vocal/{id_vocal}")
+    @DeleteMapping("/suprimer/{id_vocal}")
     public String delete(@PathVariable Long id_vocal) {
         return this.vocalService.delete(id_vocal);
     }

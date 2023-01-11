@@ -18,11 +18,11 @@ public class Commentaire {
 
     private String contenu_commentaire;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user")
     private User id_user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_idee")
     private Idee id_idee;
 }

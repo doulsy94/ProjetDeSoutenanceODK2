@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @Table(name = "users",
 uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "numero"),
         @UniqueConstraint(columnNames = "email")
 })
 public class User {

@@ -2,10 +2,10 @@ package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
-import com.sy.backEndApiAkilina.security.services.MotFilterService;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +24,16 @@ public class IdeeServiceImpl implements IdeeService {
     private final MinistereRepository ministereRepository;
 
     @Override
-    public String add(Idee idee) {
-        String filteredContent = wordFilterService.filterIdee(idee.getContenu_idee());
+    public String add(Idee idee, User user, Ministere ministere) {
+        String filteredContent = wordFilterService.filterIdee(idee);
         if(!filteredContent.equals(idee.getContenu_idee()))
             return filteredContent;
         // return "S'il vous plaît utilisez des mots appropriés, les gros mots ne sont pas autorisés";
         idee.setContenu_idee(filteredContent);
+        idee.setContexte(idee.getContexte());
         idee.setDate(new Date());
+        idee.setId_user(user);
+        idee.setId_ministere(ministere);
         ideeRepository.save(idee);
         return "Idee ajouté avec succès";
     }
@@ -45,6 +48,7 @@ public class IdeeServiceImpl implements IdeeService {
         return ideeRepository.findById(id_idee)
                 .map(idee1 -> {
                     idee1.setContenu_idee(idee1.getContenu_idee());
+                    idee1.setContexte(idee1.getContexte());
                     return ideeRepository.save(idee1);
                 }).orElseThrow(() -> new RuntimeException("Idee non trouvé !"));
     }

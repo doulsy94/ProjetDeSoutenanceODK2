@@ -28,8 +28,12 @@ public class MinistereServiceImpl implements MinistereService {
     public Ministere update(Long id_ministere, Ministere ministere) {
         return ministereRepository.findById(id_ministere)
                 .map(ministere1-> {
+                    if(ministere.getLibelle() != null)
                     ministere1.setLibelle(ministere.getLibelle());
+                    if(ministere.getImage() != null)
                     ministere1.setImage(ministere.getImage());
+                    if(ministere.getDescription() != null)
+                    ministere1.setDescription(ministere.getDescription());
                     return ministereRepository.save(ministere1);
                 }).orElseThrow(() -> new RuntimeException("Ministère non trouvé !"));
     }

@@ -31,14 +31,7 @@
 			<version>2.9.2</version>
 		</dependency>
 		<!-- Fin swagger-->
-<!-- La dependance de l'API qui permet de filtrer les gros mots-->
 
-		<dependency>
-			<groupId>com.mashape.unirest</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>1.4.9</version>
-		</dependency>
-<!-- Fin dependance API-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

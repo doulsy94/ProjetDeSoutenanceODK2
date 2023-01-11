@@ -34,20 +34,20 @@ public class CommentaireController {
     private final WordFilterService wordFilterService;
 
     @ApiOperation(value = "Ajout de commentaire")
-    @PostMapping("/ajouter_commentaire")
+    @PostMapping("/ajouter")
     public String add(@RequestBody Commentaire commentaire) {
         return wordFilterService.filterCommentaire(commentaire.getContenu_commentaire());
 
     }
 
     @ApiOperation(value = "Modification des commentaires par id")
-    @PutMapping ("/modifier_commentaire/{id_commentaire}")
+    @PutMapping ("/modifier/{id_commentaire}")
     public Commentaire update(@PathVariable Long id_commentaire, @RequestBody Commentaire commentaire){
         return commentaireService.update(id_commentaire,commentaire);
     }
 
     @ApiOperation(value = "Suppression des commentaires par id")
-    @DeleteMapping("/suprimer_commentaire/{id_commentaire}")
+    @DeleteMapping("/suprimer/{id_commentaire}")
     public String delete(@PathVariable Long id_commentaire){
         return this.commentaireService.delete(id_commentaire);
     }

@@ -1,8 +1,10 @@
 package com.sy.backEndApiAkilina;
 
+import com.sy.backEndApiAkilina.models.BadWord;
 import com.sy.backEndApiAkilina.models.ERole;
 import com.sy.backEndApiAkilina.models.Role;
 import com.sy.backEndApiAkilina.models.User;
+import com.sy.backEndApiAkilina.repository.BadwordRepository;
 import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -11,8 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -20,9 +22,11 @@ public class BackEndApiAkilinaApplication implements CommandLineRunner {
 	@Autowired
 	PasswordEncoder encoder;
 
-	final private RoleRepository roleRepository;
+	private final BadwordRepository badwordRepository;
 
-	final private UserRepository userRepository;
+	private final RoleRepository roleRepository;
+
+	private final UserRepository userRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackEndApiAkilinaApplication.class, args);
@@ -31,7 +35,11 @@ public class BackEndApiAkilinaApplication implements CommandLineRunner {
 	//***************************** METHODE PERMETTANT DE CREER UN ADMIN PAR DEFAUT **********
 	@Override
 	public void run(String... args) throws Exception {
+		creationAdmin();
+		loadBadWords();
+	}
 
+	public void creationAdmin(){
 		//VERIFICATION DE L'EXISTANCE DU ROLE ADMIN AVANT SA CREATION
 		if (roleRepository.findAll().size() == 0){
 			roleRepository.save(new Role(ERole.ROLE_ADMIN));
@@ -46,5 +54,21 @@ public class BackEndApiAkilinaApplication implements CommandLineRunner {
 			userRepository.save(useradmin);
 
 		}
+	}
+	public void loadBadWords(){
+		/*BadWord badWord = new BadWord();
+		badWord.setWord("jklm");
+		badwordRepository.save(badWord);*/
+
+
+		List<BadWord> grosmots = new ArrayList<>();
+		grosmots.add(new BadWord(null, "impoli"));
+		grosmots.add(new BadWord(null, "imbecile"));
+		grosmots.add(new BadWord(null, "clochard"));
+		grosmots.add(new BadWord(null, "con"));
+
+		if (badwordRepository.findAll().size() == 0)
+		badwordRepository.saveAll(grosmots);
+
 	}
 }

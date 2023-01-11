@@ -1,12 +1,16 @@
 package com.sy.backEndApiAkilina.security.services;
 
 import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.User;
+
 import java.util.List;
 
 public interface IdeeService {
 
     //methode permettant d'ajouter une idéé en fonction d'un ministere
-    String add(Idee idee);
+
+    String add(Idee idee, User user, Ministere ministere);
 
     //methode permettant de lire les idees
     List<Idee> read();

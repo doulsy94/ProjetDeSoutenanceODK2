@@ -29,13 +29,13 @@ public class NotificationController {
     private IdeeRepository ideeRepository;
 
     @ApiOperation(value = "Affichage de notification")
-    @GetMapping("/afficher_notif")
+    @GetMapping("/afficher")
     public List<Notification> read() {
         return notificationService.read();
     }
 
     @ApiOperation(value = "Supprimer notification")
-    @DeleteMapping("/suprimer_notif/{id_notification}")
+    @DeleteMapping("/suprimer /{id_notification}")
     public String delete(@PathVariable Long id_notification){
         return this.notificationService.delete(id_notification);
     }

@@ -23,11 +23,11 @@ public class Idee {
     private Date date;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user")
     private User id_user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_ministere")
     private Ministere id_ministere;
 

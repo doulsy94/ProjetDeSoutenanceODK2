@@ -1,8 +1,6 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
-import com.sy.backEndApiAkilina.models.BadWord;
-import com.sy.backEndApiAkilina.models.Commentaire;
-import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.BadwordRepository;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
@@ -35,15 +33,15 @@ public class WordFilterServiceImpl implements WordFilterService {
     }
 
     @Override
-    public String filterIdee(String content) {
+    public String filterIdee(Idee idee) {
         for (String word : badWords) {
-            if(content.toLowerCase().contains(word.toLowerCase()))
+            if(idee.getContenu_idee().toLowerCase().contains(word.toLowerCase()))
                 return "S'il vous plaît utilisez des mots appropriés";
         }
-        Idee ide = new Idee();
-        ide.setContenu_idee(content);
-        ide.setDate(new Date());
-        ideeRepository.save(ide);
+        idee.setDate(new Date());
+
+
+        ideeRepository.save(idee);
         return "idee ajouter avec succès";
     }
 

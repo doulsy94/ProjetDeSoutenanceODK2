@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MinistereRepository extends JpaRepository <Ministere, Long>{
 
-Ministere findByLibelle(String libelle);
+    // Methode de recherche spécifique en fonction du libelle
+    Ministere findByLibelle(String libelle);
 }
