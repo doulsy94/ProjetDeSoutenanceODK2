@@ -38,7 +38,7 @@ public class MinistereController {
 
     @ApiOperation(value = "AJOUT DES DONNEES DANS LA TABLE MINISTERE")
     @PostMapping("/ajouter")
-    
+
     public Object add(@RequestParam(value = "ministere") String minis,
                          @RequestParam(value = "file", required = true) MultipartFile file) {
         Role role = roleRepository.findByName(ERole.ROLE_ADMIN);
