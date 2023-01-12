@@ -32,13 +32,4 @@ public class NotificationServiceImpl implements NotificationService {
         return "Notification supprimé avec succès";
     }
 
-    @Override
-    public Notification getById(Long id_notification) {
-        return notificationRepository.findById(id_notification).get();
-    }
-
-    @Override
-    public Notification getByTitre(String titre) {
-        return notificationRepository.findByTitre(titre);
-    }
-}
+   }

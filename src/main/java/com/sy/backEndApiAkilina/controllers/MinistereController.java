@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/ministere")
 @RestController
@@ -37,7 +38,7 @@ public class MinistereController {
 
     @ApiOperation(value = "AJOUT DES DONNEES DANS LA TABLE MINISTERE")
     @PostMapping("/ajouter")
-    //@PreAuthorize("hasRole('ADMIN')")
+    
     public Object add(@RequestParam(value = "ministere") String minis,
                          @RequestParam(value = "file", required = true) MultipartFile file) {
         Role role = roleRepository.findByName(ERole.ROLE_ADMIN);
@@ -48,7 +49,7 @@ public class MinistereController {
                 System.out.println("ggggg");
                 ministere.setImage(SaveImage.save("minstere", file, ministere.getLibelle()));
             }
-            ministere.setId_user(admin);
+            ministere.setUser(admin);
             return ministereService.add(ministere);
 
         } catch (Exception e) {
@@ -62,13 +63,20 @@ public class MinistereController {
     }
 
     @ApiOperation(value = "LIRE MINISTERE Par libelle")
-    @GetMapping("/lire_ministere/{libelle}")
+    @GetMapping("/lireParLibelle/{libelle}")
     public Ministere readMinistereParLibelle(@PathVariable("libelle") String libelle) {
         return ministereRepository.findByLibelle(libelle);
     }
 
+    @ApiOperation(value = "LIRE MINISTERE Par ID")
+    @GetMapping("/lireParId/{id_ministere}")
+    public Optional<Ministere> readMinistereParID(@PathVariable("id_ministere") Long id_ministere) {
+        return ministereRepository.findById(id_ministere);
+    }
+
     @ApiOperation(value = "MODIFICATION DES DONNEES DE LA TABLE MINISTERE")
     @PutMapping("/modifier/{id_ministere}")
+
     public Object update(@PathVariable Long id_ministere,
                          @RequestParam(value = "ministere") String minis,
                          @RequestParam(value = "file", required = false) MultipartFile file
@@ -88,6 +96,7 @@ public class MinistereController {
 
     @ApiOperation(value = "SUPPRESION DES DONNEE DANS LA TABLE MINISTERE")
     @DeleteMapping("/supprimer/{id_ministere}")
+
     public String delete(@PathVariable Long id_ministere) {
         return ministereService.delete(id_ministere);
     }

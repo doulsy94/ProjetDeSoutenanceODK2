@@ -22,11 +22,11 @@ public class Vocal {
         this.contenu_vocal = contenu_vocal;
     }
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_user")
-    private User id_user;
+    @ManyToOne()
+    //@JoinColumn(name = "id_user")
+    private User user;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_ministere")
-    private Ministere id_ministere;
+    @ManyToOne()
+    //@JoinColumn(name = "id_ministere")
+    private Ministere ministere;
 }

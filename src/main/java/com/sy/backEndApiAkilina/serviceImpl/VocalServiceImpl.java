@@ -19,11 +19,6 @@ public class VocalServiceImpl implements VocalService {
 
     private final MinistereRepository ministereRepository;
 
-   /* @Override
-    public Vocal add(Vocal vocal) {
-        return vocalRepository.save(vocal);
-    }*/
-
     @Override
     public void add(byte[] vocal_contenu) {
 

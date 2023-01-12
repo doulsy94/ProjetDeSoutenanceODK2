@@ -13,15 +13,17 @@ import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 
 @Api(value = "idee", description = "MANIPULATION DES DONNEES DE LA TABLE IDEE")
 @RestController
 @RequestMapping("/api/idee")
 @AllArgsConstructor
+//@ToString
 public class IdeeController {
 
 
@@ -38,11 +40,10 @@ public class IdeeController {
 
     @ApiOperation(value = "Ajout d'idée")
     @PostMapping("/ajouter/{id_user}/{id_ministere}")
-
     public String add(@RequestBody Idee idee,@PathVariable("id_user") User user, @PathVariable("id_ministere") Ministere ministere) {
 
-        idee.setId_user(user);
-        idee.setId_ministere(ministere);
+        idee.setUser(user);
+        idee.setMinistere(ministere);
 
         return ideeService.add(idee, user, ministere);
 
@@ -57,7 +58,7 @@ public class IdeeController {
 
     @ApiOperation(value = "Modifier idée de l'utilisateur")
     @PutMapping("/modifier/{id_idee}")
-    public Idee update(@PathVariable Long id_idee, @RequestBody Idee idee){
+    public String update(@PathVariable Long id_idee, @RequestBody Idee idee){
         return ideeService.update(id_idee, idee);
     }
 
@@ -102,10 +103,18 @@ public class IdeeController {
         return commentaireRepository.findByIdIdee(idee);
     }*/
 
-    @ApiOperation(value = "Affichage des idées par ministere")
-    @GetMapping("/afficherIdeeParMinistere/{id_ministere}")
-        public List<Idee> AfficherIdeeParMinistere(@PathVariable long id_ministere) {
-        return ideeService.AfficherIdeeParMinistere(id_ministere);
+    @ApiOperation(value = "Affichage des idées par libelle du ministere")
+    @GetMapping("/afficherIdeeParLibelleMinistere/{libelle}")
+        public List<Idee> AfficherIdeeParLibelleMinistere(@PathVariable String libelle) {
+        return ideeService.AfficherIdeeParLibelleMinistere(libelle);
+    }
+
+    @ApiOperation(value = "Affichage des idées par Id ministere")
+    @GetMapping("/afficherIdeeParIdMinistere/{id_ministere}")
+    public List<Idee> AfficherIdeeParIdMinistere(@PathVariable long id_ministere) {
+        Ministere ministere = ministereRepository.findById(id_ministere).get();
+        System.out.println(ministere);
+        return ideeService.AfficherIdeeParIdMinistere(ministere);
     }
 
 }

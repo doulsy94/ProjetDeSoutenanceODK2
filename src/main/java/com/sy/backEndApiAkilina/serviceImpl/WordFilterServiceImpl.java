@@ -33,28 +33,21 @@ public class WordFilterServiceImpl implements WordFilterService {
     }
 
     @Override
-    public String filterIdee(Idee idee) {
+    public Boolean filterIdee(Idee idee) {
         for (String word : badWords) {
             if(idee.getContenu_idee().toLowerCase().contains(word.toLowerCase()))
-                return "S'il vous plaît utilisez des mots appropriés";
+                return true;
         }
-        idee.setDate(new Date());
-
-
-        ideeRepository.save(idee);
-        return "idee ajouter avec succès";
+        return false;
     }
 
     @Override
-    public String filterCommentaire(String content) {
+    public Boolean filterCommentaire(Commentaire commentaire) {
         for (String word : badWords) {
-            if(content.toLowerCase().contains(word.toLowerCase()))
-                return "S'il vous plaît utilisez des mots appropriés";
+            if(commentaire.getContenu_commentaire().toLowerCase().contains(word.toLowerCase()))
+                return true;
         }
-        Commentaire commentaire = new Commentaire();
-        commentaire.setContenu_commentaire(content);
-
-        commentaireRepository.save(commentaire);
-        return "commentaire ajouter avec succès";
+        return false;
     }
+
 }

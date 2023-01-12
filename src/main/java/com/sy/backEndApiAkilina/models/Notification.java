@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,13 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_notification;
-
-    private  String titre;
-    private Date datenotif;
     private String description;
+    private Date datenotif;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_idee")
-    private Idee id_idee;
+    @ManyToOne()
+    //@JoinColumn(name = "id_idee")
+    private Idee idee;
+
+
+
 }

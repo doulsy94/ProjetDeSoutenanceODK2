@@ -9,21 +9,17 @@ import java.util.List;
 public interface IdeeService {
 
     //methode permettant d'ajouter une idéé en fonction d'un ministere
-
     String add(Idee idee, User user, Ministere ministere);
 
     //methode permettant de lire les idees
     List<Idee> read();
 
     //methode permettant de modifier une idee
-    Idee update(Long id_idee, Idee idee);
-    //methode permettant de de supprimer une idee
+    String update(Long id_idee, Idee idee);
+    //methode permettant de supprimer une idee
     String delete(Long id_idee);
-
-    List<Idee> AfficherIdeeParMinistere(Long id_ministere);
-
-
-    //methode permettant de lister les idees d'un ministere
-    //List<Object[]> readIdeeOfMinistere(String ministere);
-
+    //methode permettant d'afficher les idées par libellé de ministere
+    List<Idee> AfficherIdeeParLibelleMinistere(String libelle);
+    //methode permettant d'afficher les idées par id de ministere
+    List<Idee> AfficherIdeeParIdMinistere(Ministere ministere);
 }

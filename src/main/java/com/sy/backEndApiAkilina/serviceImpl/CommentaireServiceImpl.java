@@ -2,6 +2,8 @@ package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
@@ -24,14 +26,16 @@ public class CommentaireServiceImpl implements CommentaireService {
     private final IdeeRepository ideeRepository;
 
     @Override
-    public String add(Commentaire commentaire) {
-        String filteredContent = wordFilterService.filterCommentaire(commentaire.getContenu_commentaire());
-        if(!filteredContent.equals(commentaire.getContenu_commentaire()))
-            return filteredContent;
-        // return "S'il vous plaît utilisez des mots appropriés, les gros mots ne sont pas autorisés";
-        commentaire.setContenu_commentaire(filteredContent);
-        commentaireRepository.save(commentaire);
-        return "Commentaire ajouté avec succès";
+    public String add(Commentaire commentaire, User user, Idee idee) {
+        Boolean filteredContent = wordFilterService.filterCommentaire(commentaire);
+        if (filteredContent)
+            return "Veuillez utiliser des mots approprié";
+        else {
+            commentaire.setUser(user);
+            commentaire.setIdee(idee);
+            commentaireRepository.save(commentaire);
+            return "Commentaire ajouté avec succès";
+        }
     }
 
     @Override
@@ -40,12 +44,17 @@ public class CommentaireServiceImpl implements CommentaireService {
     }
 
     @Override
-    public Commentaire update(Long id_commentaire, Commentaire commentaire) {
-        return commentaireRepository.findById(id_commentaire)
-                .map(commentaire1 -> {
-                    commentaire1.setContenu_commentaire(commentaire1.getContenu_commentaire());
-                    return commentaireRepository.save(commentaire1);
-                }).orElseThrow(() -> new RuntimeException("Commentaire non trouvé !"));
+    public String update(Long id_commentaire, Commentaire commentaire) {
+        if(!wordFilterService.filterCommentaire(commentaire)){
+            return commentaireRepository.findById(id_commentaire)
+                            .map(commentaire1 -> {
+                            commentaire1.setContenu_commentaire(commentaire.getContenu_commentaire());
+                                commentaireRepository.save(commentaire1);
+                                return "Commentaire modifier avec succes";
+                            }).orElseThrow();
+        }else {
+            return "Veuillez utiliser des mots appropriés";
+        }
     }
 
     @Override
@@ -54,7 +63,7 @@ public class CommentaireServiceImpl implements CommentaireService {
         return "Commentaire supprimé avec succès";
     }
 
-    @Override
+   /* @Override
     public List<Commentaire> AfficherCommentaireParIdee(Long id_idee) {
 
         Idee idee = (Idee) ideeRepository.findById(id_idee).get();
@@ -71,6 +80,12 @@ public class CommentaireServiceImpl implements CommentaireService {
             }
         }
         return commentaires;
+    }*/
+
+    @Override
+    public List<Commentaire> AfficherIdeeParIdIdee(Idee idee) {
+        return commentaireRepository.findByIdee(idee);
     }
+
 }
 

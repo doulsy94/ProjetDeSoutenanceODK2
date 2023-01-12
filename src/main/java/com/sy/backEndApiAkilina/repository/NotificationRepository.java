@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Notification findByTitre(String titre);
 
 
 }

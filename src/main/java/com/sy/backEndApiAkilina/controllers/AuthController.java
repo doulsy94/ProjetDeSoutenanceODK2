@@ -59,8 +59,6 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmailOrNumero(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
@@ -68,13 +66,6 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
-        /*return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getNumero(),
-                userDetails.getEmail(),
-                roles));*/
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new JwtResponse(userDetails.getId_user(),
@@ -121,21 +112,18 @@ public class AuthController {
 
             if (strRoles == null) {
                 Role userRole = roleRepository.findByName(ERole.ROLE_USER);
-                //  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                 roles.add(userRole);
             } else {
                 strRoles.forEach(role -> {
                     switch (role) {
                         case "admin":
                             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN);
-                            // .orElseThrow(() -> new RuntimeException("Error: Role n'existe pas."));
                             roles.add(adminRole);
 
                             break;
 
                         default:
                             Role userRole = roleRepository.findByName(ERole.ROLE_USER);
-                            // .orElseThrow(() -> new RuntimeException("Erreur: Role n'existe pas"));
                             roles.add(userRole);
                     }
                 });

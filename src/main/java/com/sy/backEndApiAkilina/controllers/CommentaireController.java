@@ -2,7 +2,6 @@ package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.Idee;
-import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
@@ -34,15 +33,24 @@ public class CommentaireController {
     private final WordFilterService wordFilterService;
 
     @ApiOperation(value = "Ajout de commentaire")
-    @PostMapping("/ajouter")
-    public String add(@RequestBody Commentaire commentaire) {
-        return wordFilterService.filterCommentaire(commentaire.getContenu_commentaire());
+    @PostMapping("/ajouter/{id_user}/{id_idee}")
+    public String add(@RequestBody Commentaire commentaire, @PathVariable("id_user") User user, @PathVariable("id_idee") Idee idee) {
 
+        commentaire.setIdee(idee);
+        commentaire.setUser(user);
+
+        return commentaireService.add(commentaire, user, idee);
+    }
+
+    @ApiOperation(value = "Lire toutes les commentaires")
+    @GetMapping("/lire")
+    public List<Commentaire> read() {
+        return commentaireService.read();
     }
 
     @ApiOperation(value = "Modification des commentaires par id")
     @PutMapping ("/modifier/{id_commentaire}")
-    public Commentaire update(@PathVariable Long id_commentaire, @RequestBody Commentaire commentaire){
+    public String update(@PathVariable Long id_commentaire, @RequestBody Commentaire commentaire){
         return commentaireService.update(id_commentaire,commentaire);
     }
 
@@ -52,10 +60,17 @@ public class CommentaireController {
         return this.commentaireService.delete(id_commentaire);
     }
 
-    @ApiOperation(value = "Affichage des commentaires par idée")
-    @GetMapping("/afficherCommentaireParIdee/{id_idee}")
+    /*@ApiOperation(value = "Affichage des commentaires par idée")
+    @GetMapping("/afficherCommentaireParIdIdee/{id_idee}")
     public List<Commentaire> AfficherCommentaireParIdee(@PathVariable long id_idee) {
         return commentaireService.AfficherCommentaireParIdee(id_idee);
+    }*/
+    @ApiOperation(value = "Affichage des commentaires par Id idee")
+    @GetMapping("/afficherIdeeParIdIdee/{id_idee}")
+    public List<Commentaire> AfficherIdeeParIdIdee(@PathVariable long id_idee) {
+        Idee idee = ideeRepository.findById(id_idee).get();
+        System.out.println(idee);
+        return commentaireService.AfficherIdeeParIdIdee(idee);
     }
 
 }

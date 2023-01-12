@@ -6,6 +6,7 @@ import com.sy.backEndApiAkilina.security.services.MinistereService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
 @AllArgsConstructor
@@ -46,6 +47,11 @@ public class MinistereServiceImpl implements MinistereService {
     @Override
     public Ministere trouverMinistereParLibelle(String libelle) {
         return ministereRepository.findByLibelle(libelle);
+    }
+
+    @Override
+    public Optional<Ministere> trouverMinistereParID(long id_ministere) {
+        return ministereRepository.findById(id_ministere);
     }
 
 

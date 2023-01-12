@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Ministere {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ministere;
+    private long id_ministere;
 
     @Column(unique = true)
     private String libelle;
@@ -23,7 +23,7 @@ public class Ministere {
 
     private String image;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_user")
-    private User id_user;
+    @ManyToOne()
+    //@JoinColumn(name = "id_user")
+    private User user;
 }

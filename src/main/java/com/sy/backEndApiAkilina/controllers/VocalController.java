@@ -39,18 +39,18 @@ public class VocalController {
     @PostMapping("/ajouter")
     public void add(@RequestParam("vocal_contenu") String voc,
                                  @RequestParam("fichier") MultipartFile fichier) throws IOException {
-        //==================Commentaires=======================
+
 
         Vocal vocal = new JsonMapper().readValue(voc, Vocal.class);
 
         long id=2;
         long iduser = 1;
 
-        User us =(User) userRepository.findById(iduser).get();
+        User user =(User) userRepository.findById(iduser).get();
         Ministere ministere = (Ministere) ministereRepository.findById(id).get();
 
-        vocal.setId_ministere(ministere);
-        vocal.setId_user(us);
+        vocal.setMinistere(ministere);
+        vocal.setUser(user);
 
         vocalService.add(fichier.getBytes());
     }

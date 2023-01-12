@@ -25,17 +25,16 @@ public class IdeeServiceImpl implements IdeeService {
 
     @Override
     public String add(Idee idee, User user, Ministere ministere) {
-        String filteredContent = wordFilterService.filterIdee(idee);
-        if(!filteredContent.equals(idee.getContenu_idee()))
-            return filteredContent;
-        // return "S'il vous plaît utilisez des mots appropriés, les gros mots ne sont pas autorisés";
-        idee.setContenu_idee(filteredContent);
-        idee.setContexte(idee.getContexte());
-        idee.setDate(new Date());
-        idee.setId_user(user);
-        idee.setId_ministere(ministere);
-        ideeRepository.save(idee);
-        return "Idee ajouté avec succès";
+        Boolean filteredContent = wordFilterService.filterIdee(idee);
+        if (filteredContent)
+            return "Veuillez utiliser des mots approprié";
+        else {
+            idee.setDate(new Date());
+            idee.setUser(user);
+            idee.setMinistere(ministere);
+            ideeRepository.save(idee);
+            return "Idee ajouté avec succès";
+        }
     }
 
     @Override
@@ -44,14 +43,21 @@ public class IdeeServiceImpl implements IdeeService {
     }
 
     @Override
-    public Idee update(Long id_idee, Idee idee) {
-        return ideeRepository.findById(id_idee)
-                .map(idee1 -> {
-                    idee1.setContenu_idee(idee1.getContenu_idee());
-                    idee1.setContexte(idee1.getContexte());
-                    return ideeRepository.save(idee1);
-                }).orElseThrow(() -> new RuntimeException("Idee non trouvé !"));
+    public String update(Long id_idee, Idee idee) {
+        if (!wordFilterService.filterIdee(idee)) {
+            return ideeRepository.findById(id_idee)
+                    .map(idee1 -> {
+                        idee1.setContexte(idee.getContexte());
+                        idee1.setContenu_idee(idee.getContenu_idee());
+                        ideeRepository.save(idee1);
+                        return "Idee modifier avec succes";
+                    }).orElseThrow();
+        } else {
+            return "Veuillez utiliser des mots appropriés";
+        }
+
     }
+
 
     @Override
     public String delete(Long id_idee) {
@@ -60,29 +66,21 @@ public class IdeeServiceImpl implements IdeeService {
     }
 
     @Override
-    public List<Idee> AfficherIdeeParMinistere(Long id_ministere) {
+    public List<Idee> AfficherIdeeParLibelleMinistere(String libelle) {
 
-        Ministere ministere = (Ministere) ministereRepository.findById(id_ministere).get();
-        List<Idee>  idees = new ArrayList<>();
-        List<Idee> toutidee= ideeRepository.findAll();
-
-        for(Idee ide : toutidee) {
-            try {
-                if (ide.getId_ministere().equals(ministere.getId_ministere())) {
-                    idees.add(ide);
-                }
-            } catch (Exception e) {
-                System.out.println("erreur survenue lors de l'affichage des idees par ministere");
+        List<Idee> idees =ideeRepository.findAll();
+        List<Idee> idees1 = new ArrayList<>();
+        for(Idee ide:idees){
+            if(ide.getMinistere().getLibelle().equals(libelle)){
+                idees1.add(ide);
             }
         }
-        return idees;
+
+        return  idees1;
     }
 
-  /*  @Override
-    public List<Object[]> readIdeeOfMinistere(String ministere) {
-        return ideeRepository.FINDIDEENFONCTIONMINISTERE(ministere);
-    }*/
-
-
+    @Override
+    public List<Idee> AfficherIdeeParIdMinistere(Ministere ministere) {
+        return ideeRepository.findByMinistere(ministere);
+    }
 }
-
