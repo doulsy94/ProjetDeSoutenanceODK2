@@ -1,9 +1,9 @@
 package com.sy.backEndApiAkilina.security.services;
 
-import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -11,9 +11,22 @@ public interface UserService {
     List<User> read();
 
     //methode permettant de modifier un utilisateur
-    User update(Long id_user, User user);
+    //String update(User user);
 
     //methode permettant de de supprimer un utilisateur
     String delete(Long id_user);
+
+    Optional<User> trouverParemailOrNumeroAndPass(String emailOrNumero, String password);
+
+    User getById(Long id_user);
+    User getByEmail(String email);
+
+    public void resetPassword(User user);
+
+    public void updateUserPassword(User user, String newPassword);
+
+    User findByEmail(String userEmail);
+
+    User ajouter(User user);
 
 }

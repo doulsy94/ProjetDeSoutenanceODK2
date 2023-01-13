@@ -24,12 +24,6 @@ public class UserController {
         return userService.read();
     }
 
-    @ApiOperation(value = "Modifier l'utilisateur")
-    @PutMapping("/modifier_user/{id_user}")
-    public User update(@PathVariable Long id_user, @RequestBody User user){
-        return userService.update(id_user, user);
-    }
-
     @ApiOperation(value = "Supprimer l'utilisateur")
     @DeleteMapping("/suprimer_user/{id_user}")
     public String delete(@PathVariable Long id_user){

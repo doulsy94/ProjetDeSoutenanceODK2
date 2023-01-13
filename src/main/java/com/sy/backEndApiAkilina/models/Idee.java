@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,5 +31,8 @@ public class Idee {
     //@JoinColumn(name = "id_ministere")
     private Ministere ministere;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "idee", cascade = CascadeType.ALL)
+    private Notification notification;
 
 }

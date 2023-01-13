@@ -23,10 +23,10 @@ public class Notification {
     private String description;
     private Date datenotif;
 
-    @ManyToOne()
-    //@JoinColumn(name = "id_idee")
-    private Idee idee;
 
+    @OneToOne
+    //@JoinColumn(name = "id_idee", referencedColumnName = "id")
+    private  Idee idee;
 
 
 }

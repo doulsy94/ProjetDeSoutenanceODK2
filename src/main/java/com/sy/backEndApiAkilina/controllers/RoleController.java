@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/test")
 public class RoleController {
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public String userAccess(){
         return "Contenu de l'Utilisateur.";
     }

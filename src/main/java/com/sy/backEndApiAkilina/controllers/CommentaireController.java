@@ -60,17 +60,12 @@ public class CommentaireController {
         return this.commentaireService.delete(id_commentaire);
     }
 
-    /*@ApiOperation(value = "Affichage des commentaires par idée")
-    @GetMapping("/afficherCommentaireParIdIdee/{id_idee}")
-    public List<Commentaire> AfficherCommentaireParIdee(@PathVariable long id_idee) {
-        return commentaireService.AfficherCommentaireParIdee(id_idee);
-    }*/
     @ApiOperation(value = "Affichage des commentaires par Id idee")
-    @GetMapping("/afficherIdeeParIdIdee/{id_idee}")
-    public List<Commentaire> AfficherIdeeParIdIdee(@PathVariable long id_idee) {
+    @GetMapping("/afficherCommentaireParIdIdee/{id_idee}")
+    public List<Commentaire> AfficherCommentaireParIdIdee(@PathVariable long id_idee) {
         Idee idee = ideeRepository.findById(id_idee).get();
         System.out.println(idee);
-        return commentaireService.AfficherIdeeParIdIdee(idee);
+        return commentaireService.AfficherCommentaireParIdIdee(idee);
     }
 
 }

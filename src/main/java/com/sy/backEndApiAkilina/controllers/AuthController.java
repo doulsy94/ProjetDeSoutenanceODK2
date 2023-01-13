@@ -10,20 +10,27 @@ import com.sy.backEndApiAkilina.payload.response.MessageResponse;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.security.jwt.JwtUtils;
+import com.sy.backEndApiAkilina.security.services.UserService;
 import com.sy.backEndApiAkilina.serviceImpl.UserDetailsImpl;
+import com.sy.backEndApiAkilina.utils.EmailConstructor;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +48,14 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Autowired
+    EmailConstructor emailConstructor;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
@@ -50,6 +65,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @ApiOperation(value = "Connexion de l'utilisateur")
@@ -88,7 +106,7 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Erreur: L'Email existe déjà"));
         }
-        if (userRepository.existsByNumero(signupRequest.getEmail())) {
+        if (userRepository.existsByNumero(signupRequest.getNumero())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Erreur: Le numero existe déjà"));
@@ -130,6 +148,7 @@ public class AuthController {
             }
             user.setRoles(roles);
             userRepository.save(user);
+            mailSender.send(emailConstructor.constructNewUserEmail(user));
 
             return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
         } else {
@@ -137,7 +156,52 @@ public class AuthController {
         }
     }
 
-   // Creation d'un nouveau user
+    //::::::::::::::::::::::::::::::REINITIALISER PASSWORD::::::::::::::::::::::::::::::::::::::::::://
+
+    @PostMapping("/resetPassword/{email}")
+    public ResponseEntity<String> resetPassword(@PathVariable("email") String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return new ResponseEntity<String>("Email non fourni", HttpStatus.BAD_REQUEST);
+        }
+        userService.resetPassword(user);
+        return new ResponseEntity<String>("Email envoyé!", HttpStatus.OK);
+    }
+
+    //::::::::::::::::::::::::::::::::::::::::Changer mot de passe:::::::::::::::::::::::::::::::::::::::::::::::://
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestBody HashMap<String, String> request) {
+        String emailOrNumero = request.get("emailOrNumero");
+        User user = userRepository.findByNumero(emailOrNumero);
+
+        if (user == null) {
+            return new ResponseEntity<>("Utilisateur non fourni!", HttpStatus.BAD_REQUEST);
+        }
+        String currentPassword = request.get("currentpassword");
+        String newPassword = request.get("newpassword");
+        String confirmpassword = request.get("confirmpassword");
+        if (!newPassword.equals(confirmpassword)) {
+            return new ResponseEntity<>("PasswordNotMatched", HttpStatus.BAD_REQUEST);
+        }
+        String userPassword = user.getPassword();
+        try {
+            if (newPassword != null && !newPassword.isEmpty() && !StringUtils.isEmpty(newPassword)) {
+                if (bCryptPasswordEncoder.matches(currentPassword, userPassword)) {
+                    userService.updateUserPassword(user, newPassword);
+                }
+            } else {
+                return new ResponseEntity<>("IncorrectCurrentPassword", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Mot de passe changé avec succès!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error Occured: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+   // Déconnexion d'un nouveau user
 
     @ApiOperation(value = "Déconnexion de l'utilisateur")
     @PostMapping("/signout")

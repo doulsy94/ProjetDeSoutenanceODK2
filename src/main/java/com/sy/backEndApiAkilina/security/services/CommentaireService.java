@@ -22,6 +22,6 @@ public interface CommentaireService {
 
    // List<Commentaire> AfficherCommentaireParIdee(Long id_idee);
 
-    List<Commentaire> AfficherIdeeParIdIdee(Idee idee);
+    List<Commentaire> AfficherCommentaireParIdIdee(Idee idee);
 
 }

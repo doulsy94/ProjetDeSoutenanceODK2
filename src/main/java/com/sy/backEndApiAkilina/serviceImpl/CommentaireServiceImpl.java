@@ -63,27 +63,8 @@ public class CommentaireServiceImpl implements CommentaireService {
         return "Commentaire supprimé avec succès";
     }
 
-   /* @Override
-    public List<Commentaire> AfficherCommentaireParIdee(Long id_idee) {
-
-        Idee idee = (Idee) ideeRepository.findById(id_idee).get();
-        List<Commentaire>  commentaires = new ArrayList<>();
-        List<Commentaire> toutcommentaire = commentaireRepository.findAll();
-
-        for(Commentaire com : toutcommentaire) {
-            try {
-                if (com.getContenu_commentaire().equals(idee.getId_idee())) {
-                    commentaires.add(com);
-                }
-            } catch (Exception e) {
-                System.out.println("erreur survenue lors de l'affichage des commentaires par idee");
-            }
-        }
-        return commentaires;
-    }*/
-
     @Override
-    public List<Commentaire> AfficherIdeeParIdIdee(Idee idee) {
+    public List<Commentaire> AfficherCommentaireParIdIdee(Idee idee) {
         return commentaireRepository.findByIdee(idee);
     }
 
