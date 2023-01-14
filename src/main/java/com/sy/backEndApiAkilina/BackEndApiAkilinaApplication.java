@@ -4,7 +4,7 @@ import com.sy.backEndApiAkilina.models.BadWord;
 import com.sy.backEndApiAkilina.models.ERole;
 import com.sy.backEndApiAkilina.models.Role;
 import com.sy.backEndApiAkilina.models.User;
-import com.sy.backEndApiAkilina.repository.BadwordRepository;
+import com.sy.backEndApiAkilina.repository.BadWordRepository;
 import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class BackEndApiAkilinaApplication implements CommandLineRunner {
 	@Autowired
 	PasswordEncoder encoder;
 
-	private final BadwordRepository badwordRepository;
+	private final BadWordRepository badwordRepository;
 
 	private final RoleRepository roleRepository;
 

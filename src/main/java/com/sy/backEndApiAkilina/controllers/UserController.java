@@ -24,6 +24,12 @@ public class UserController {
         return userService.read();
     }
 
+    @ApiOperation(value = "Nombre de l'utilisateur")
+    @GetMapping("/afficher_user_nombre")
+    public int readNombre() {
+        return userService.read().size();
+    }
+
     @ApiOperation(value = "Supprimer l'utilisateur")
     @DeleteMapping("/suprimer_user/{id_user}")
     public String delete(@PathVariable Long id_user){

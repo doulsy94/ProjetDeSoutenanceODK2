@@ -1,17 +1,13 @@
 package com.sy.backEndApiAkilina.controllers;
 
-
 import com.sy.backEndApiAkilina.models.Notification;
-import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.UserRepository;
-import com.sy.backEndApiAkilina.security.services.CommentaireService;
 import com.sy.backEndApiAkilina.security.services.NotificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequestMapping("/api/notification")

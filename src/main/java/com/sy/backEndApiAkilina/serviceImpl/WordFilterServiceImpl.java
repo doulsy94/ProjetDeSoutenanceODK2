@@ -1,7 +1,7 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.*;
-import com.sy.backEndApiAkilina.repository.BadwordRepository;
+import com.sy.backEndApiAkilina.repository.BadWordRepository;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 public class WordFilterServiceImpl implements WordFilterService {
 
     @Autowired
-    private BadwordRepository badwordRepository;
+    private BadWordRepository badwordRepository;
 
     @Autowired
     private IdeeRepository ideeRepository;

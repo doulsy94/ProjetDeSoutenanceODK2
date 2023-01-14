@@ -56,6 +56,11 @@ public class IdeeController {
         return ideeService.read();
     }
 
+    @ApiOperation(value = "Nombre de IDEE")
+    @GetMapping("/afficher_idee_nombre")
+    public int readNombre() {return ideeService.read().size();
+    }
+
     @ApiOperation(value = "Modifier idée de l'utilisateur")
     @PutMapping("/modifier/{id_idee}")
     public String update(@PathVariable Long id_idee, @RequestBody Idee idee){

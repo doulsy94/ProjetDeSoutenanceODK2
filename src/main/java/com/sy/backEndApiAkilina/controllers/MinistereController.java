@@ -62,6 +62,12 @@ public class MinistereController {
         return ministereService.read();
     }
 
+    @ApiOperation(value = "Nombre de ministere")
+    @GetMapping("/afficher_ministere_nombre")
+    public int readNombre() {return ministereService.read().size();
+    }
+
+
     @ApiOperation(value = "LIRE MINISTERE Par libelle")
     @GetMapping("/lireParLibelle/{libelle}")
     public Ministere readMinistereParLibelle(@PathVariable("libelle") String libelle) {

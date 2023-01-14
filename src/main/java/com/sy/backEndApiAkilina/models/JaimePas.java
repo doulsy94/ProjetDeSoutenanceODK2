@@ -1,28 +1,27 @@
 package com.sy.backEndApiAkilina.models;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "bad_words")
-@NoArgsConstructor
-@AllArgsConstructor
-public class BadWord {
+@Entity
+public class JaimePas {
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String word;
+    @ManyToOne
+    private User user;
 
-    public BadWord(Long o) {
-        this.id = o;
+    @ManyToOne
+    private Idee idee;
 
-    }
+
 }
