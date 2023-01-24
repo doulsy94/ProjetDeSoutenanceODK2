@@ -12,14 +12,13 @@ import java.util.List;
 @RequestMapping("/api/user")
 @RestController
 @Api(value = "user", description = "MANIPULATION DES DONNEES DE LA TABLE USER")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
-
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8100"}, maxAge = 3600, allowCredentials="true")
 @AllArgsConstructor
 public class UserController {
 
     final private UserService userService;
-    @ApiOperation(value = "Affichage de l'utilisateur")
-    @GetMapping("/afficher_user")
+    @ApiOperation(value = "Affichage de tous les utilisateur")
+    @GetMapping("/lire")
     public List<User> read() {
         return userService.read();
     }

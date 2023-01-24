@@ -20,13 +20,18 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_notification;
-    private String description;
     private Date datenotif;
 
+    private String createur;
 
-    @OneToOne
-    //@JoinColumn(name = "id_idee", referencedColumnName = "id")
+    private String ministere;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
     private  Idee idee;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private  FichierVocal fichierVocal;
 
 
 }

@@ -31,11 +31,6 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.deleteById(id_notification);
         return "Notification supprimé avec succès";
     }
-    @Override
-    public Notification getById(Long id_notification) {
-
-        return notificationRepository.findById(id_notification).get();
-    }
 
 
    }

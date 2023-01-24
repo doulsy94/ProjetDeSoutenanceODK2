@@ -34,8 +34,13 @@ public class WordFilterServiceImpl implements WordFilterService {
     @Override
     public Boolean filterIdee(Idee idee) {
         for (String word : badWords) {
-            if(idee.getContenu_idee().toLowerCase().contains(word.toLowerCase()))
-                return true;
+            try {
+                if (idee.getContenu_idee().toLowerCase().contains(word.toLowerCase()))
+                    return true;
+            } catch (Exception e) {
+
+            }
+
         }
         return false;
     }
@@ -43,10 +48,16 @@ public class WordFilterServiceImpl implements WordFilterService {
     @Override
     public Boolean filterCommentaire(Commentaire commentaire) {
         for (String word : badWords) {
-            if(commentaire.getContenu_commentaire().toLowerCase().contains(word.toLowerCase()))
-                return true;
+            try {
+                if (commentaire.getContenu_commentaire().toLowerCase().contains(word.toLowerCase()))
+                    return true;
+            } catch (Exception e) {
+
+            }
         }
-        return false;
+            return false;
+        }
+
     }
 
-}
+

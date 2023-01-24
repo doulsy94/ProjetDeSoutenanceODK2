@@ -17,7 +17,7 @@ public interface CommentaireService {
 
     //methode permettant de modifier un commentaire
     String update(Long id_commentaire, Commentaire commentaire);
-    //methode permettant de de supprimer un commentaire
+    //methode permettant de supprimer un commentaire
     String delete(Long id_commentaire);
 
    // List<Commentaire> AfficherCommentaireParIdee(Long id_idee);

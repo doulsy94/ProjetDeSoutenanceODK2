@@ -22,7 +22,7 @@ public class User {
     private Long id_user;
 
     @NotBlank
-    @Size(max = 20)
+    @Size(min = 3, max = 20)
     private String username;
 
     @Size(max = 50)
@@ -32,6 +32,10 @@ public class User {
     @NotBlank
     @Size(max = 12)
     private String numero;
+
+    private String addresse;
+
+    private String image;
 
     @NotBlank
     @Size(max=120)
@@ -52,14 +56,17 @@ public class User {
 
     }
 
-    public User(String username, String email, String numero, String password, String confirmPassword){
+    public User(String username, String email, String numero, String addresse, String password, String confirmPassword){
         this.username = username;
         this.email = email;
         this.numero = numero;
+        this.addresse = addresse;
         this.password = password;
         this.confirmPassword = confirmPassword;
 
     }
+
+
     public Long getId_user() {
         return id_user;
     }
@@ -87,6 +94,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddresse() {
+        return addresse;
+    }
+
+    public void setAddresse(String addresse) {
+        this.addresse = addresse;
     }
 
     public String getPassword() {

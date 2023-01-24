@@ -14,11 +14,5 @@ public interface NotificationService {
     //methode permettant de de supprimer une notification
     String delete(Long id_notification);
 
-    Notification getById(Long id_notification);
-
-
-
-
-
 
 }

@@ -6,13 +6,15 @@ import com.sy.backEndApiAkilina.security.services.BadWordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/api/badword")
 @RestController
 @Api(value = "badword", description = "MANIPULATION DES DONNEES DE LA TABLE BadWord")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8100"}, maxAge = 3600, allowCredentials="true")
 
 public class BadWordController {
 
@@ -23,8 +25,17 @@ public class BadWordController {
 
     @ApiOperation(value = "Ajouter BadWord")
     @PostMapping("/ajouter")
-    public BadWord add(@RequestBody BadWord badWord) {
-        return badWordService.add(badWord);
+    public ResponseEntity<?> add(@RequestBody BadWord badWord) {
+
+        if (badWordRepository.existsBadWordByWord(badWord.getWord())){
+            return new ResponseEntity<>("Ce mots existe deja", HttpStatus.BAD_REQUEST);
+        }
+        if(badWord.getWord().length()<=3){
+            return new ResponseEntity<>("Veuillez saisir un mot superieur à 3 lettres", HttpStatus.BAD_REQUEST);
+
+        }
+        BadWord badWord1= badWordService.add(badWord);
+        return new ResponseEntity<>(badWord1,HttpStatus.OK);
     }
 
 
@@ -38,7 +49,12 @@ public class BadWordController {
     @DeleteMapping("/supprimer/{id}")
 
     public String delete(@PathVariable Long id) {
-        return badWordService.delete(id);
+        try {
+            return badWordService.delete(id);
+        }catch (Exception e){
+            return e.getMessage();
+        }
+
     }
 
 }

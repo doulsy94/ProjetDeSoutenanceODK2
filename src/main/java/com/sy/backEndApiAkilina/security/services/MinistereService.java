@@ -19,6 +19,7 @@ public interface MinistereService {
     String delete(Long id_ministere);
     //methode permettant de trouver ministere par libelle
     Ministere trouverMinistereParLibelle(String libelle);
+
     //methode permettant de trouver ministere par id
     Optional<Ministere> trouverMinistereParID(long id_ministere);
 }

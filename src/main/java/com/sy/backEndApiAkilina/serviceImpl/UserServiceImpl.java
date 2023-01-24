@@ -13,9 +13,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+
+
 
 @AllArgsConstructor
 @Service
@@ -89,4 +96,18 @@ public class UserServiceImpl implements UserService {
         mailSender.send(emailConstructor.constructNewUserEmail(user));
         return user;
     }
-}
+
+    @Override
+    public String saveUserImage(MultipartFile multipartFile, Long userImageId) {
+        byte[] bytes;
+        try {
+            Files.deleteIfExists(Paths.get("C:/xampp/htdocs/apiakilina/images/utilisateur"+ userImageId + ".png"));
+            bytes = multipartFile.getBytes();
+            Path path = Paths.get("C:/xampp/htdocs/apiakilina/images/utilisateur/" + userImageId + ".png");
+            Files.write(path, bytes);
+            return "User picture saved to server";
+        } catch (IOException e) {
+            return "User picture Saved";
+        }
+    }
+    }

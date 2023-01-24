@@ -1,7 +1,9 @@
 package com.sy.backEndApiAkilina.payload.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +12,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class SignupRequest {
 
     @NotBlank
@@ -23,8 +25,10 @@ public class SignupRequest {
     private String email;
 
     @NotBlank
-    @Size(max = 12)
+    @Size(min = 8, max = 12)
     private String numero;
+
+    private String addresse;
 
     private Set<String> role;
 
@@ -58,6 +62,14 @@ public class SignupRequest {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public String getAddresse() {
+        return addresse;
+    }
+
+    public void setAddresse(String addresse) {
+        this.addresse = addresse;
     }
 
     public String getPassword() {

@@ -80,6 +80,8 @@ public class WebSecurityConfig {
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/badword/**").permitAll()
+                .antMatchers("/api/jaime/**").permitAll()
+                .antMatchers("/api/jaimepas/**").permitAll()
                 .antMatchers("/api/ministere/**").permitAll()
                 .antMatchers("/api/idee/**").permitAll()
                 .antMatchers("/api/commentaire/**").permitAll()

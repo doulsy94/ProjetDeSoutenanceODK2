@@ -2,6 +2,7 @@ package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.Notification;
 import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
 @AllArgsConstructor
@@ -29,7 +31,14 @@ public class IdeeServiceImpl implements IdeeService {
         if (filteredContent)
             return "Veuillez utiliser des mots approprié";
         else {
-            idee.setDate(new Date());
+            Date date= new Date();
+            Notification notification = new Notification();
+            notification.setCreateur(user.getUsername());
+            notification.setMinistere(ministere.getLibelle());
+            notification.setDatenotif(date);
+            notification.setIdee(idee);
+            idee.setNotification(notification);
+            idee.setDate(date);
             idee.setUser(user);
             idee.setMinistere(ministere);
             ideeRepository.save(idee);
@@ -47,7 +56,6 @@ public class IdeeServiceImpl implements IdeeService {
         if (!wordFilterService.filterIdee(idee)) {
             return ideeRepository.findById(id_idee)
                     .map(idee1 -> {
-                        idee1.setContexte(idee.getContexte());
                         idee1.setContenu_idee(idee.getContenu_idee());
                         ideeRepository.save(idee1);
                         return "Idee modifier avec succes";
@@ -83,4 +91,10 @@ public class IdeeServiceImpl implements IdeeService {
     public List<Idee> AfficherIdeeParIdMinistere(Ministere ministere) {
         return ideeRepository.findByMinistere(ministere);
     }
+
+    @Override
+    public Optional<Idee> trouverIdeeParID(long id_idee) {
+        return ideeRepository.findById(id_idee);
+    }
+
 }

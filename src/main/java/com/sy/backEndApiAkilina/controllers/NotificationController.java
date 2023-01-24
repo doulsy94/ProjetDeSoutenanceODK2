@@ -13,8 +13,7 @@ import java.util.List;
 @RequestMapping("/api/notification")
 @RestController
 @Api(value = "notification", description = "MANIPULATION DES DONNEES DE LA TABLE NOTIFICATION")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
-
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8100"}, maxAge = 3600, allowCredentials="true")
 public class NotificationController {
 
     @Autowired

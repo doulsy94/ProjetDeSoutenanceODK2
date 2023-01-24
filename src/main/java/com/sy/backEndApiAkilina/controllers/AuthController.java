@@ -29,16 +29,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.sy.backEndApiAkilina.configuration.SaveImage.serveruser;
 
 
 @Api(value = "authentification", description = "Inscription et connexion des users")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8100"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -46,6 +47,8 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    JwtUtils jwtUtils;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -62,9 +65,6 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -84,13 +84,15 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
+        JwtResponse jwtResponse = new JwtResponse(userDetails.getId_user(),
+                userDetails.getUsername(),
+                userDetails.getNumero(),
+                userDetails.getEmail(),
+                roles);
+        String values[] = jwtCookie.toString().split(";");
+        jwtResponse.setAccessToken(values[0]);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new JwtResponse(userDetails.getId_user(),
-                        userDetails.getUsername(),
-                        userDetails.getNumero(),
-                        userDetails.getEmail(),
-                        roles));
+                .body(jwtResponse);
     }
 
     @ApiOperation(value = "Creation de compte de l'utilisateur")
@@ -116,6 +118,7 @@ public class AuthController {
             User user = new User(signupRequest.getUsername(),
                     signupRequest.getEmail(),
                     signupRequest.getNumero(),
+                    signupRequest.getAddresse(),
                     encoder.encode(signupRequest.getPassword()),
                     encoder.encode(signupRequest.getConfirmPassword()));
 
@@ -145,6 +148,7 @@ public class AuthController {
                             roles.add(userRole);
                     }
                 });
+
             }
             user.setRoles(roles);
             userRepository.save(user);
@@ -153,6 +157,21 @@ public class AuthController {
             return ResponseEntity.ok(new MessageResponse("Utilisateur enrégistrer avec succès"));
         } else {
             return ResponseEntity.badRequest().body(new MessageResponse("Verifier les mots de passe "));
+        }
+    }
+
+    @PostMapping("/photo/upload/{email}")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile, @PathVariable String email) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return new ResponseEntity<>("Cet username n existe", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            user.setImage(serveruser+user.getId_user().toString()+".png");
+            userService.saveUserImage(multipartFile, user.getId_user());
+            return new ResponseEntity<>("User Picture Saved!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User Picture Not Saved", HttpStatus.BAD_REQUEST);
         }
     }
 
