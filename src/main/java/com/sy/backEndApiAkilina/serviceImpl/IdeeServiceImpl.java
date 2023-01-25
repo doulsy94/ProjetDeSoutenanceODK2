@@ -1,11 +1,9 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
-import com.sy.backEndApiAkilina.models.Idee;
-import com.sy.backEndApiAkilina.models.Ministere;
-import com.sy.backEndApiAkilina.models.Notification;
-import com.sy.backEndApiAkilina.models.User;
+import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
+import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import lombok.AllArgsConstructor;
@@ -22,6 +20,8 @@ public class IdeeServiceImpl implements IdeeService {
     private final IdeeRepository ideeRepository;
 
     private final WordFilterService wordFilterService;
+
+    private RoleRepository roleRepository;
 
     private final MinistereRepository ministereRepository;
 
@@ -96,5 +96,6 @@ public class IdeeServiceImpl implements IdeeService {
     public Optional<Idee> trouverIdeeParID(long id_idee) {
         return ideeRepository.findById(id_idee);
     }
+
 
 }

@@ -1,10 +1,12 @@
 package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.models.Commentaire;
+import com.sy.backEndApiAkilina.models.ERole;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.CommentaireRepository;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
+import com.sy.backEndApiAkilina.repository.RoleRepository;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
@@ -30,6 +32,8 @@ public class CommentaireController {
     @Autowired
     private IdeeRepository ideeRepository;
     private CommentaireRepository commentaireRepository;
+
+    private final RoleRepository roleRepository;
 
     private final WordFilterService wordFilterService;
 
@@ -80,7 +84,15 @@ public class CommentaireController {
     public String delete(@PathVariable Long id_commentaire, @PathVariable Long id_user) {
         try {
             Commentaire commentaire = commentaireRepository.findById(id_commentaire).get();
-            if (commentaire.getUser().getId_user() == id_user) {
+
+            User user = userRepository.findById(id_user).get();
+
+            if (user.getRoles().contains(roleRepository.findByName(ERole.ROLE_ADMIN))) {
+                commentaireService.delete(id_commentaire);
+                return "Commentaire supprimee par l'admin avec succes! ";
+            }
+
+            else if (commentaire.getUser().getId_user() == id_user) {
                 return commentaireService.delete(id_commentaire);
             } else {
                 return "vous n'etes pas autorisé à faire cette action";

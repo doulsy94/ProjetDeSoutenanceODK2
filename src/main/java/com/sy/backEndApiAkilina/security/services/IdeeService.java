@@ -2,6 +2,7 @@ package com.sy.backEndApiAkilina.security.services;
 
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
+import com.sy.backEndApiAkilina.models.Role;
 import com.sy.backEndApiAkilina.models.User;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface IdeeService {
 
     //methode permettant de trouver idee par id
     Optional<Idee> trouverIdeeParID(long id_idee);
+
+
 }

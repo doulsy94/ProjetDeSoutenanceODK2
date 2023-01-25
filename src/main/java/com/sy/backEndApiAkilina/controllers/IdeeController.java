@@ -1,12 +1,10 @@
 package com.sy.backEndApiAkilina.controllers;
 
+import com.sy.backEndApiAkilina.models.ERole;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
-import com.sy.backEndApiAkilina.repository.CommentaireRepository;
-import com.sy.backEndApiAkilina.repository.IdeeRepository;
-import com.sy.backEndApiAkilina.repository.MinistereRepository;
-import com.sy.backEndApiAkilina.repository.UserRepository;
+import com.sy.backEndApiAkilina.repository.*;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
@@ -34,6 +32,8 @@ public class IdeeController {
     private final IdeeRepository ideeRepository;
     private final CommentaireRepository commentaireRepository;
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
     private final WordFilterService wordFilterService;
 
@@ -89,9 +89,16 @@ public class IdeeController {
         try {
             Idee idee = ideeRepository.findById(id_idee).get();
 
-            if (idee.getUser().getId_user() == id_user) {
+            User user = userRepository.findById(id_user).get();
+
+            if (user.getRoles().contains(roleRepository.findByName(ERole.ROLE_ADMIN))) {
+                 ideeService.delete(id_idee);
+                return "idee supprimee par l'admin avec succes! ";
+            }
+            else if (idee.getUser().getId_user() == id_user) {
                 return ideeService.delete(id_idee);
-            } else {
+            }
+            else {
                 return "vous n'etes pas autorisé à faire cette action";
             }
         } catch (Exception e) {
