@@ -28,6 +28,7 @@ public class WebSecurityConfig {
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
+            "api/idee/**",
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
@@ -72,8 +73,8 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+       http.cors().and().csrf().disable()
+        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers(abdoulaye).permitAll()
                 .antMatchers("/api/test/**").permitAll()

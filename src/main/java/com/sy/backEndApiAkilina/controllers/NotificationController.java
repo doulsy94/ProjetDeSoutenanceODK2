@@ -2,6 +2,7 @@ package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.models.Notification;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
+import com.sy.backEndApiAkilina.repository.NotificationRepository;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.NotificationService;
 import io.swagger.annotations.Api;
@@ -22,6 +23,8 @@ public class NotificationController {
     private UserRepository userRepository;
     @Autowired
     private IdeeRepository ideeRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @ApiOperation(value = "Affichage de notification")
     @GetMapping("/afficher")
@@ -30,9 +33,20 @@ public class NotificationController {
     }
 
     @ApiOperation(value = "Supprimer notification")
-    @DeleteMapping("/suprimer /{id_notification}")
+    @DeleteMapping("/supprimer /{id_notification}")
     public String delete(@PathVariable Long id_notification){
         return this.notificationService.delete(id_notification);
+    }
+
+    @ApiOperation(value = "LIRE IDEE Par ID")
+    @GetMapping("/lireParId/{id_notification}")
+    public Object readNotificationParID(@PathVariable("id_notification") Long id_notification) {
+        try {
+            return notificationRepository.findById(id_notification);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 
 

@@ -2,6 +2,8 @@ package com.sy.backEndApiAkilina.serviceImpl;
 
 import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.FichierVocalRepository;
+import com.sy.backEndApiAkilina.repository.MinistereRepository;
+import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.FichierVocalService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,19 +12,25 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class FichierVocalServiceImpl implements FichierVocalService {
     @Autowired
     private FichierVocalRepository fichierVocalRepository;
+    @Autowired
+    private final UserRepository userRepository;
+    private final MinistereRepository ministereRepository;
 
-    public String add(FichierVocal fichierVocal, User user, Ministere ministere) {
+    public String add(FichierVocal fichierVocal, Long id_user, Long id_ministere) {
+      Optional<User> user =   userRepository.findById(id_user);
+        Optional<Ministere> ministere =   ministereRepository.findById(id_ministere);
 
         Date date = new Date();
         Notification notification = new Notification();
-        notification.setCreateur(user.getUsername());
-        notification.setMinistere(ministere.getLibelle());
+        notification.setCreateur(user.get().getUsername());
+        notification.setMinistere(ministere.get().getLibelle());
         notification.setDatenotif(date);
         notification.setFichierVocal(fichierVocal);
 
@@ -31,8 +39,8 @@ public class FichierVocalServiceImpl implements FichierVocalService {
         }
         fichierVocal.setNotification(notification);
         fichierVocal.setDateCreation(date);
-        fichierVocal.setUser(user);
-        fichierVocal.setMinistere(ministere);
+        fichierVocal.setUser(user.get());
+        fichierVocal.setMinistere(ministere.get());
         fichierVocalRepository.save(fichierVocal);
 
         return "Vocal enregistrer avec succès";

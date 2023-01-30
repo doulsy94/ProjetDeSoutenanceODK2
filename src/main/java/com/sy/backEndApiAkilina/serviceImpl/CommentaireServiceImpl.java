@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
+import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
 @AllArgsConstructor
@@ -67,6 +69,31 @@ public class CommentaireServiceImpl implements CommentaireService {
     public List<Commentaire> AfficherCommentaireParIdIdee(Idee idee) {
         return commentaireRepository.findByIdee(idee);
     }
+
+    @Override
+    public Optional<Commentaire> trouverCommentaireParID(long id_commentaire) {
+        return commentaireRepository.findById(id_commentaire);
+    }
+
+
+    /*  @Override
+    public ResponseMessage SetEtat(Commentaire commentaire, Long id_commentaire) {
+
+        Optional<Commentaire> commentaire1 = commentaireRepository.findById(id_commentaire);
+        if(commentaire1.isPresent()){
+            Commentaire commentaire2 = commentaireRepository.findById(id_commentaire).get();
+            commentaire2.setEtat(commentaire.isEtat());
+            this.commentaireRepository.save(commentaire2);
+            ResponseMessage message = new ResponseMessage("Commentaire modifiée avec succès !", true);
+            return message;
+        }
+        else {
+            ResponseMessage message = new ResponseMessage("Commentaire non modifiés !", false);
+            return message;
+
+
+        }
+    }*/
 
 }
 

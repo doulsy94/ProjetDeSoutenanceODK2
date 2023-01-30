@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FichierVocalService {
 
-    String add(FichierVocal fichierVocal, User user, Ministere ministere);
+    String add(FichierVocal fichierVocal, Long id_user, Long id_ministere);
 
     String delete(Long id);
 

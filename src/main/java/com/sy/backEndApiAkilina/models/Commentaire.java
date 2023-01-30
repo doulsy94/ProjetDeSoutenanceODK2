@@ -18,6 +18,8 @@ public class Commentaire {
 
     private String contenu_commentaire;
 
+    //private boolean etat = true;
+
     @ManyToOne()
     private User user;
 

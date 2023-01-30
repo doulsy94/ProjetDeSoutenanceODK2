@@ -1,5 +1,7 @@
 package com.sy.backEndApiAkilina.security.services;
 
+import com.sy.backEndApiAkilina.models.Idee;
+import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,5 +33,9 @@ public interface UserService {
     User ajouter(User user);
 
     String saveUserImage(MultipartFile multipartFile, Long userImageId);
+
+    Optional<User> trouverUserParID(long id_user);
+
+    String update(Long id_user, User user);
 
 }

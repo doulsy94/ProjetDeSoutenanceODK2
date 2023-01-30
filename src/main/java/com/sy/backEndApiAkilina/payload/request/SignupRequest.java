@@ -24,8 +24,6 @@ public class SignupRequest {
     @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 8, max = 12)
     private String numero;
 
     private String addresse;

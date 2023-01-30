@@ -97,7 +97,7 @@ public class AuthController {
 
     @ApiOperation(value = "Creation de compte de l'utilisateur")
     @PostMapping("signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -160,14 +160,14 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/photo/upload/{email}")
-    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile, @PathVariable String email) {
-        User user = userService.findByEmail(email);
+    @PostMapping("/photo/upload/{id_user}")
+    public ResponseEntity<String> fileUpload(@RequestParam("imageuser") MultipartFile multipartFile, @PathVariable Long id_user) {
+        User user = userRepository.findById(id_user).get();
         if (user == null) {
-            return new ResponseEntity<>("Cet username n existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Cet user n'existe pas", HttpStatus.BAD_REQUEST);
         }
         try {
-            user.setImage(serveruser+user.getId_user().toString()+".png");
+            user.setImageuser(serveruser+user.getId_user().toString()+".png");
             userService.saveUserImage(multipartFile, user.getId_user());
             return new ResponseEntity<>("User Picture Saved!", HttpStatus.OK);
         } catch (Exception e) {

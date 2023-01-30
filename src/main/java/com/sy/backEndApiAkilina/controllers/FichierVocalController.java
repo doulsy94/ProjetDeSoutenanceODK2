@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,14 +30,18 @@ public class FichierVocalController {
 
     @ApiOperation(value = "Ajout de vocal")
     @PostMapping("/ajouter/{id_user}/{id_ministere}")
-    public String add(@RequestBody FichierVocal fichierVocal, @PathVariable("id_user") Long id_user, @PathVariable("id_ministere") Long id_ministere) {
+    public String add( @RequestParam(value = "file", required = false) MultipartFile file,
+                       @RequestBody FichierVocal fichierVocal,
+                       @PathVariable("id_user") Long id_user,
+                       @PathVariable("id_ministere") Long id_ministere) {
+
         try {
             User user= userRepository.findById(id_user).get();
             Ministere ministere = ministereRepository.findById(id_ministere).get();
             fichierVocal.setUser(user);
             fichierVocal.setMinistere(ministere);
-
-            return fichierVocalService.add(fichierVocal, user, ministere);
+           fichierVocal.setFileName(file.getName());
+            return fichierVocalService.add(fichierVocal, id_user, id_ministere);
 
         }catch (Exception e){
             return e.getMessage();

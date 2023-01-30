@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
+import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
 import com.sy.backEndApiAkilina.repository.UserRepository;
 import com.sy.backEndApiAkilina.security.services.UserService;
@@ -110,4 +111,23 @@ public class UserServiceImpl implements UserService {
             return "User picture Saved";
         }
     }
+
+    @Override
+    public Optional<User> trouverUserParID(long id_user) {
+        return userRepository.findById(id_user);
     }
+
+    @Override
+    public String update(Long id_user, User user) {
+
+        return userRepository.findById(id_user)
+                .map(user1 -> {
+                    user1.setEmail(user.getEmail());
+                    user1.setNumero(user.getNumero());
+                    user1.setAddresse(user.getAddresse());
+                    userRepository.save(user1);
+                    return "Utilisateur modifier avec succèes";
+                }).orElseThrow();
+    }
+
+}

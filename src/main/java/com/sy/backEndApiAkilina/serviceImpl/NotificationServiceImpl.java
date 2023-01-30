@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
+import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Notification;
 import com.sy.backEndApiAkilina.repository.NotificationRepository;
 import com.sy.backEndApiAkilina.security.services.NotificationService;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -32,5 +34,11 @@ public class NotificationServiceImpl implements NotificationService {
         return "Notification supprimé avec succès";
     }
 
+    @Override
+    public Optional<Notification> trouverNotificationParID(long id_notification) {
+        return notificationRepository.findById(id_notification);
+    }
 
-   }
+
+
+}

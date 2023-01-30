@@ -26,6 +26,8 @@ public class Notification {
 
     private String ministere;
 
+    private String imagecreateur;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     private  Idee idee;

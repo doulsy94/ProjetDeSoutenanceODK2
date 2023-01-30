@@ -23,6 +23,8 @@ public class Idee {
 
     private Date date;
 
+    // private boolean etat = true;
+
 
     @ManyToOne()
     private User user;

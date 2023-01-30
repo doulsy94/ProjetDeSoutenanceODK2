@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
+import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
@@ -34,6 +35,7 @@ public class IdeeServiceImpl implements IdeeService {
             Date date= new Date();
             Notification notification = new Notification();
             notification.setCreateur(user.getUsername());
+            notification.setImagecreateur(user.getImageuser());
             notification.setMinistere(ministere.getLibelle());
             notification.setDatenotif(date);
             notification.setIdee(idee);
@@ -96,6 +98,27 @@ public class IdeeServiceImpl implements IdeeService {
     public Optional<Idee> trouverIdeeParID(long id_idee) {
         return ideeRepository.findById(id_idee);
     }
+
+
+/*    @Override
+    public ResponseMessage SetEtat(Idee idee, Long id_idee) {
+
+        Optional<Idee> idee1 = ideeRepository.findById(id_idee);
+        if(idee1.isPresent()){
+            Idee idee2 = ideeRepository.findById(id_idee).get();
+            idee2.setEtat(idee.isEtat());
+            this.ideeRepository.save(idee2);
+            ResponseMessage message = new ResponseMessage("Idee modifiée avec succès !", true);
+            return message;
+        }
+        else {
+            ResponseMessage message = new ResponseMessage("Idee non modifiés !", false);
+            return message;
+
+
+        }
+    }*/
+
 
 
 }

@@ -1,11 +1,13 @@
 package com.sy.backEndApiAkilina.security.services;
 
+import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.Commentaire;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentaireService {
 
@@ -24,4 +26,7 @@ public interface CommentaireService {
 
     List<Commentaire> AfficherCommentaireParIdIdee(Idee idee);
 
+    Optional<Commentaire> trouverCommentaireParID(long id_commentaire);
+
+    //String SetEtat(Long id_commentaire);
 }

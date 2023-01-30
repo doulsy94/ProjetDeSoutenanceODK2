@@ -35,7 +35,7 @@ public class User {
 
     private String addresse;
 
-    private String image;
+    private String imageuser;
 
     @NotBlank
     @Size(max=120)

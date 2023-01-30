@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.security.services;
 
+import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.Role;
@@ -29,5 +30,5 @@ public interface IdeeService {
     //methode permettant de trouver idee par id
     Optional<Idee> trouverIdeeParID(long id_idee);
 
-
+    //ResponseMessage SetEtat(Idee idee, Long id_idee);
 }
