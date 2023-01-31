@@ -1,10 +1,7 @@
 package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.configuration.ResponseMessage;
-import com.sy.backEndApiAkilina.models.ERole;
-import com.sy.backEndApiAkilina.models.Idee;
-import com.sy.backEndApiAkilina.models.Ministere;
-import com.sy.backEndApiAkilina.models.User;
+import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.*;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
 import com.sy.backEndApiAkilina.security.services.IdeeService;
@@ -12,8 +9,13 @@ import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @Api(value = "idee", description = "MANIPULATION DES DONNEES DE LA TABLE IDEE")
@@ -50,7 +52,7 @@ public class IdeeController {
             return ideeService.add(idee, user, ministere);
 
         } catch (Exception e) {
-            return e.getMessage();
+            return "Veuillez utilisez des mots approprié";
         }
 
     }
@@ -140,6 +142,108 @@ public class IdeeController {
         }
 
     }
+
+    @ApiOperation(value = "Faire like")
+    @PostMapping("/like/{id_user}/{id_idee}")
+    public ResponseEntity<?> likeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+
+        Idee idee = ideeService.trouverIdeeParID((id_idee));
+        if (idee == null) {
+            return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
+        }
+        User user = userRepository.findById(id_user).get();
+        if (user == null){
+            return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
+        }
+        try {
+            idee.setLikes(1);
+            List<Idee> ideeList = user.getLikedIdee();
+            ideeList.add(idee);
+            user.setLikedIdee(ideeList);
+            userRepository.save(user);
+            return new ResponseEntity<>(idee, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("can't like idee", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Faire unlike")
+    @PostMapping("/unlike/{id_user}/{id_idee}")
+    public ResponseEntity<?> unlikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+
+        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        if (idee == null) {
+            return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
+        }
+        User user = userRepository.findById(id_user).get();
+        if (user == null){
+            return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
+        }
+        try {
+            idee.setLikes(idee.getLikes()-1);
+            List<Idee> ideeList = user.getLikedIdee();
+            ideeList.add(idee);
+            user.getLikedIdee().remove(idee);
+            userRepository.save(user);
+            return new ResponseEntity<>(idee, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("can't unlike idee", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Faire dislike")
+    @PostMapping("/dislike/{id_user}/{id_idee}")
+    public ResponseEntity<?> disLikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+
+        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        if (idee == null) {
+            return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
+        }
+        User user = userRepository.findById(id_user).get();
+        if (user == null){
+            return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
+        }
+        try {
+            idee.setDislikes(1);
+            List<Idee> ideeList = user.getDislikedIdee();
+            ideeList.add(idee);
+            user.setDislikedIdee(ideeList);
+            userRepository.save(user);
+            return new ResponseEntity<>(idee, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("can't dislike idee", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Faire disunlike")
+    @PostMapping("/disunlike/{id_user}/{id_idee}")
+    public ResponseEntity<?> disunlikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+
+        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        if (idee == null) {
+            return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
+        }
+        User user = userRepository.findById(id_user).get();
+        if (user == null){
+            return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
+        }
+        try {
+            idee.setDislikes(idee.getDislikes()-1);
+            List<Idee> ideeList = user.getDislikedIdee();
+            ideeList.add(idee);
+            user.getDislikedIdee().remove(idee);
+            userRepository.save(user);
+            return new ResponseEntity<>(idee, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("can't disunlike idee", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+
+
+
 
    /* @PatchMapping("/etat/{id_idee}")
     public ResponseMessage SetEtat(@RequestBody Idee idee, @PathVariable("id_idee") Long id_idee) {

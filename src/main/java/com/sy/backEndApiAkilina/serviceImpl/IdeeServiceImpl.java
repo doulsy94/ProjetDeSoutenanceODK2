@@ -1,6 +1,5 @@
 package com.sy.backEndApiAkilina.serviceImpl;
 
-import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.IdeeRepository;
 import com.sy.backEndApiAkilina.repository.MinistereRepository;
@@ -9,10 +8,8 @@ import com.sy.backEndApiAkilina.security.services.IdeeService;
 import com.sy.backEndApiAkilina.security.services.WordFilterService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 //Annotation permettant de gérer les problèmes de constructeur pour tous les champs
 @AllArgsConstructor
@@ -47,6 +44,28 @@ public class IdeeServiceImpl implements IdeeService {
             return "Idee ajouté avec succès";
         }
     }
+
+/*    @Override
+    public String add(Idee idee, HashMap<String, String> request, User user, Ministere ministere) {
+        Boolean filteredContent = wordFilterService.filterIdee(idee);
+        if (filteredContent)
+            return "Veuillez utiliser des mots approprié";
+        else {
+            Date date= new Date();
+            Notification notification = new Notification();
+            notification.setCreateur(user.getUsername());
+            notification.setImagecreateur(user.getImageuser());
+            notification.setMinistere(ministere.getLibelle());
+            notification.setDatenotif(date);
+            notification.setIdee(idee);
+            idee.setNotification(notification);
+            idee.setDate(date);
+            idee.setUser(user);
+            idee.setMinistere(ministere);
+            ideeRepository.save(idee);
+            return "Idee ajouté avec succès";
+        }
+    }*/
 
     @Override
     public List<Idee> read() {
@@ -95,7 +114,7 @@ public class IdeeServiceImpl implements IdeeService {
     }
 
     @Override
-    public Optional<Idee> trouverIdeeParID(long id_idee) {
+    public Idee trouverIdeeParID(long id_idee) {
         return ideeRepository.findById(id_idee);
     }
 

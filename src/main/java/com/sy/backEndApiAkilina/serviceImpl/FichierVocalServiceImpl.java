@@ -23,7 +23,7 @@ public class FichierVocalServiceImpl implements FichierVocalService {
     private final UserRepository userRepository;
     private final MinistereRepository ministereRepository;
 
-    public String add(FichierVocal fichierVocal, Long id_user, Long id_ministere) {
+    public void add(FichierVocal fichierVocal, Long id_user, Long id_ministere) {
       Optional<User> user =   userRepository.findById(id_user);
         Optional<Ministere> ministere =   ministereRepository.findById(id_ministere);
 
@@ -34,16 +34,16 @@ public class FichierVocalServiceImpl implements FichierVocalService {
         notification.setDatenotif(date);
         notification.setFichierVocal(fichierVocal);
 
-        if (fichierVocal.getUser().getId_user() == null) {
+       /* if (fichierVocal.getUser().getId_user() == null) {
             return "L'utilisateur ne peut pas être vide";
-        }
+        }*/
         fichierVocal.setNotification(notification);
         fichierVocal.setDateCreation(date);
         fichierVocal.setUser(user.get());
         fichierVocal.setMinistere(ministere.get());
         fichierVocalRepository.save(fichierVocal);
 
-        return "Vocal enregistrer avec succès";
+        //return "Vocal enregistrer avec succès";
     }
 
     @Override

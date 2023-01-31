@@ -109,7 +109,7 @@ public class CommentaireController {
     @GetMapping("/afficherCommentaireParIdIdee/{id_idee}")
     public Object AfficherCommentaireParIdIdee(@PathVariable long id_idee) {
         try {
-            Idee idee = ideeRepository.findById(id_idee).get();
+            Idee idee = ideeRepository.findById(id_idee);
             System.out.println(idee);
             return commentaireService.AfficherCommentaireParIdIdee(idee);
         } catch (Exception e) {

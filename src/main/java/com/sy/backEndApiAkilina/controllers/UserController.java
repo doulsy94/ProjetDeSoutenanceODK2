@@ -26,6 +26,7 @@ public class UserController {
         return userService.read();
     }
 
+
     @ApiOperation(value = "Nombre de l'utilisateur")
     @GetMapping("/afficher_user_nombre")
     public int readNombre() {

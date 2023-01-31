@@ -1,18 +1,18 @@
 package com.sy.backEndApiAkilina.security.services;
 
-import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
-import com.sy.backEndApiAkilina.models.Role;
 import com.sy.backEndApiAkilina.models.User;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 public interface IdeeService {
 
     //methode permettant d'ajouter une idéé en fonction d'un ministere
     String add(Idee idee, User user, Ministere ministere);
+
+    //String add(Idee idee, HashMap<String, String> request, User user, Ministere ministere);
 
     //methode permettant de lire les idees
     List<Idee> read();
@@ -28,7 +28,7 @@ public interface IdeeService {
     List<Idee> AfficherIdeeParIdMinistere(Ministere ministere);
 
     //methode permettant de trouver idee par id
-    Optional<Idee> trouverIdeeParID(long id_idee);
+    Idee trouverIdeeParID(long id_idee);
 
     //ResponseMessage SetEtat(Idee idee, Long id_idee);
 }

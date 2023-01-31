@@ -1,5 +1,6 @@
 package com.sy.backEndApiAkilina.controllers;
 
+import com.sy.backEndApiAkilina.configuration.AudioConfig;
 import com.sy.backEndApiAkilina.models.FichierVocal;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
@@ -13,6 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 @Api(value = "vocal", description = "MANIPULATION DES DONNEES DE LA TABLE VOCAL")
@@ -30,23 +33,34 @@ public class FichierVocalController {
 
     @ApiOperation(value = "Ajout de vocal")
     @PostMapping("/ajouter/{id_user}/{id_ministere}")
-    public String add( @RequestParam(value = "file", required = false) MultipartFile file,
-                       @RequestBody FichierVocal fichierVocal,
-                       @PathVariable("id_user") Long id_user,
-                       @PathVariable("id_ministere") Long id_ministere) {
-
+    public String add(@RequestParam(value = "file", required = false) MultipartFile file,
+                      @PathVariable("id_user") Long id_user,
+                      @PathVariable("id_ministere") Long id_ministere) throws Exception {
         try {
-            User user= userRepository.findById(id_user).get();
+            String uploadDir = System.getProperty("user.dir") + "/assets/audio";
+
+            File convFile = new File(file.getOriginalFilename());
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
+            AudioConfig.saveAudio(uploadDir, convFile);
+
+            FichierVocal fichierVocal = new FichierVocal();
+            User user = userRepository.findById(id_user).get();
             Ministere ministere = ministereRepository.findById(id_ministere).get();
             fichierVocal.setUser(user);
-            fichierVocal.setMinistere(ministere);
-           fichierVocal.setFileName(file.getName());
-            return fichierVocalService.add(fichierVocal, id_user, id_ministere);
 
-        }catch (Exception e){
+            fichierVocal.setMinistere(ministere);
+            fichierVocal.setFileName(file.getOriginalFilename());
+            fichierVocalService.add(fichierVocal, id_user, id_ministere);
+
+
+        } catch (Exception e) {
             return e.getMessage();
         }
+        return "enregistrer avec succès";
     }
+
 
     @ApiOperation(value = "Lire les vocales de l'utilisateur")
     @GetMapping("/lire")

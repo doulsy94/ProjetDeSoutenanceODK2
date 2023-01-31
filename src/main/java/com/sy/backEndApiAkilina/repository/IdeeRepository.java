@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface IdeeRepository extends JpaRepository <Idee, Long>{
     public List<Idee> findByMinistere(Ministere ministere);
+
+    Idee findById(long id_idee);
 }

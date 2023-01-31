@@ -23,6 +23,12 @@ public class Idee {
 
     private Date date;
 
+    private int likes;
+
+    private int dislikes;
+
+
+
     // private boolean etat = true;
 
 
@@ -36,13 +42,13 @@ public class Idee {
     @OneToOne(mappedBy = "idee", cascade = CascadeType.ALL)
     private Notification notification;
 
-    @JsonIgnore
+   /* @JsonIgnore
     @OneToMany(mappedBy = "idee", cascade = CascadeType.ALL)
     List <Jaime> jaimes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "idee", cascade = CascadeType.ALL)
-    List<JaimePas> jaimePas;
+    List<JaimePas> jaimePas;*/
     @JsonIgnore
     @OneToMany(mappedBy = "idee", cascade = CascadeType.ALL)
     List<Commentaire> commentaires;

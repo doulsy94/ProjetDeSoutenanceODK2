@@ -1,15 +1,13 @@
 package com.sy.backEndApiAkilina.security.services;
 
 import com.sy.backEndApiAkilina.models.FichierVocal;
-import com.sy.backEndApiAkilina.models.Idee;
 import com.sy.backEndApiAkilina.models.Ministere;
-import com.sy.backEndApiAkilina.models.User;
 
 import java.util.List;
 
 public interface FichierVocalService {
 
-    String add(FichierVocal fichierVocal, Long id_user, Long id_ministere);
+    void add(FichierVocal fichierVocal, Long id_user, Long id_ministere);
 
     String delete(Long id);
 
