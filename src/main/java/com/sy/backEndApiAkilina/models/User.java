@@ -44,13 +44,6 @@ public class User {
 
     private String imageuser;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
-    private List<Idee> likedIdee;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
-    private List<Idee> dislikedIdee;
 
     @NotBlank
     @Size(max=120)
@@ -60,7 +53,20 @@ public class User {
     @Size(max=120)
     private String confirmPassword;
 
-   @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY )
+    @JoinTable(name = "users_liked_idee",
+            uniqueConstraints = @UniqueConstraint(name = "false", columnNames = {"liked_idee_id_idee"}),
+            joinColumns = @JoinColumn(name = "user_id_user",unique = false),
+            inverseJoinColumns = @JoinColumn(name = "liked_idee_id_idee",unique = false))
+    private List<Idee> likedIdee;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
+
+    private List<Idee> dislikedIdee;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))

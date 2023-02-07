@@ -13,6 +13,9 @@ public class SaveImage {
     public static String serveruser = localhost + "apiakilina/images/utilisateur/";
     public static String servercategorie = localhost + "apiakilina/images/categorie/";
 
+    public static String servervocal = localhost + "apiakilina/vocal/categorie/";
+
+    public static String Vocallocation = "C:/xampp/htdocs/apiakilina/vocal/categorie";
     public static String Categorielocation = "C:/xampp/htdocs/apiakilina/images/categorie";
     public static String Userlocation = "C:/xampp/htdocs/apiakilina/images/utilisateur";
 
@@ -23,7 +26,10 @@ public class SaveImage {
         if (typeImage == "user") {
             location = Userlocation;
             server = serveruser;
-        } else {
+        } else if (typeImage == "vocal") {
+            location = Vocallocation;
+            server = servervocal;
+        }else{
             location = Categorielocation;
             server = servercategorie;
 
@@ -38,21 +44,21 @@ public class SaveImage {
                 // si le fichier n'existe pas deja
                 Files.createDirectories(chemin);
                 Files.copy(file.getInputStream(), chemin
-                        .resolve(nomFichier + file.getOriginalFilename().substring(index).toLowerCase()));
-                src = server + nomFichier
-                        + file.getOriginalFilename().substring(index).toLowerCase();
+                        .resolve(nomFichier));
+                src = server + nomFichier;
+                        //+ file.getOriginalFilename().substring(index).toLowerCase();
             } else {
                 // si le fichier existe pas deja
-                String newPath = location + nomFichier
-                        + file.getOriginalFilename().substring(index).toLowerCase();
+                String newPath = location + nomFichier;
+                        //+ file.getOriginalFilename().substring(index).toLowerCase();
                 Path newchemin = Paths.get(newPath);
                 if (!Files.exists(newchemin)) {
                     // si le fichier n'existe pas deja
                     Files.copy(file.getInputStream(), chemin
                             .resolve(
-                                    nomFichier + file.getOriginalFilename().substring(index).toLowerCase()));
-                    src = server + nomFichier
-                            + file.getOriginalFilename().substring(index).toLowerCase();
+                                    nomFichier ));
+                    src = server + nomFichier;
+                            //+ file.getOriginalFilename().substring(index).toLowerCase();
                 } else {
                     // si le fichier existe pas deja on le suprime et le recrèe
 
@@ -60,9 +66,9 @@ public class SaveImage {
 
                     Files.copy(file.getInputStream(), chemin
                             .resolve(
-                                    nomFichier + file.getOriginalFilename().substring(index).toLowerCase()));
-                    src = server + nomFichier
-                            + file.getOriginalFilename().substring(index).toLowerCase();
+                                    nomFichier));
+                    src = server + nomFichier;
+                            //+ file.getOriginalFilename().substring(index).toLowerCase();
                 }
 
             }

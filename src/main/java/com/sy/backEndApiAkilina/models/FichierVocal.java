@@ -19,11 +19,9 @@ public class FichierVocal {
     private Long id;
 
 
-    @Column(nullable = false)
+   @Column(nullable = false)
     private String fileName;
 
-    @Column(nullable = false)
-    private long duration;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

@@ -41,7 +41,7 @@ public class MinistereController {
             Ministere ministere = new JsonMapper().readValue(minis, Ministere.class);
             if (file != null) {
                 System.out.println("ggggg");
-                ministere.setImage(SaveImage.save("minstere", file, ministere.getLibelle()));
+                ministere.setImage(SaveImage.save("minstere", file, file.getOriginalFilename()));
             }
             ministere.setUser(admin);
             return ministereService.add(ministere);

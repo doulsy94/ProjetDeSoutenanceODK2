@@ -1,6 +1,7 @@
 package com.sy.backEndApiAkilina.controllers;
 
 import com.sy.backEndApiAkilina.configuration.AudioConfig;
+import com.sy.backEndApiAkilina.configuration.SaveImage;
 import com.sy.backEndApiAkilina.models.FichierVocal;
 import com.sy.backEndApiAkilina.models.Ministere;
 import com.sy.backEndApiAkilina.models.User;
@@ -37,13 +38,14 @@ public class FichierVocalController {
                       @PathVariable("id_user") Long id_user,
                       @PathVariable("id_ministere") Long id_ministere) throws Exception {
         try {
-            String uploadDir = System.getProperty("user.dir") + "/assets/audio";
+            System.err.println("hello");
+           // String uploadDir = "C:\\xampp\\htdocs\\apiakilina\\vocal";
 
             File convFile = new File(file.getOriginalFilename());
             FileOutputStream fos = new FileOutputStream(convFile);
             fos.write(file.getBytes());
             fos.close();
-            AudioConfig.saveAudio(uploadDir, convFile);
+           // AudioConfig.saveAudio(uploadDir, convFile);
 
             FichierVocal fichierVocal = new FichierVocal();
             User user = userRepository.findById(id_user).get();
@@ -51,11 +53,16 @@ public class FichierVocalController {
             fichierVocal.setUser(user);
 
             fichierVocal.setMinistere(ministere);
-            fichierVocal.setFileName(file.getOriginalFilename());
+            if (file != null) {
+                System.out.println("ggggg");
+                fichierVocal.setFileName(SaveImage.save("vocal", file, file.getOriginalFilename()));
+            }
+            //fichierVocal.setFileName(file.getOriginalFilename());
             fichierVocalService.add(fichierVocal, id_user, id_ministere);
 
 
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             return e.getMessage();
         }
         return "enregistrer avec succès";
@@ -69,13 +76,13 @@ public class FichierVocalController {
     }
 
     @ApiOperation(value = "Supprimer vocal de l'utilisateur")
-    @DeleteMapping("/suprimer/{id_idee}/{id_user}")
-    public String delete(@PathVariable Long id_idee, @PathVariable Long id_user) {
+    @DeleteMapping("/supprimer/{id}/{id_user}")
+    public String delete(@PathVariable Long id, @PathVariable Long id_user) {
         try {
-            FichierVocal fichierVocal = fichierVocalRepository.findById(id_idee).get();
+            FichierVocal fichierVocal = fichierVocalRepository.findById(id).get();
 
             if (fichierVocal.getUser().getId_user() == id_user) {
-                return fichierVocalService.delete(id_idee);
+                return fichierVocalService.delete(id);
             } else {
                 return "vous n'etes pas autorisé à faire cette action";
             }

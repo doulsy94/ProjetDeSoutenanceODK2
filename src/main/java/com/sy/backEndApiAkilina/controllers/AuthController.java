@@ -218,10 +218,7 @@ public class AuthController {
         }
     }
 
-
-
    // Déconnexion d'un nouveau user
-
     @ApiOperation(value = "Déconnexion de l'utilisateur")
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {

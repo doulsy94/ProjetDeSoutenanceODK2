@@ -1,6 +1,5 @@
 package com.sy.backEndApiAkilina.controllers;
 
-import com.sy.backEndApiAkilina.configuration.ResponseMessage;
 import com.sy.backEndApiAkilina.models.*;
 import com.sy.backEndApiAkilina.repository.*;
 import com.sy.backEndApiAkilina.security.services.CommentaireService;
@@ -12,11 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
 
 @Api(value = "idee", description = "MANIPULATION DES DONNEES DE LA TABLE IDEE")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8100"}, maxAge = 3600, allowCredentials="true")
@@ -155,23 +150,26 @@ public class IdeeController {
         if (user == null){
             return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
         }
-        try {
-            idee.setLikes(1);
+        System.err.println(ideeRepository.nombreLikeParUtilisateurSurIde(id_user,id_idee));
+
+        if (ideeRepository.nombreLikeParUtilisateurSurIde(id_user,id_idee)>=1)
+        {
+            return ResponseEntity.ok().body("Vous ne pouvez pas aimer");
+        }else {
+            idee.setLikes(idee.getLikes()+1);
             List<Idee> ideeList = user.getLikedIdee();
             ideeList.add(idee);
             user.setLikedIdee(ideeList);
             userRepository.save(user);
             return new ResponseEntity<>(idee, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("can't like idee", HttpStatus.BAD_REQUEST);
         }
     }
 
     @ApiOperation(value = "Faire unlike")
     @PostMapping("/unlike/{id_user}/{id_idee}")
-    public ResponseEntity<?> unlikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+    public ResponseEntity<?> unLikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
 
-        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        Idee idee = ideeService.trouverIdeeParID((id_idee));
         if (idee == null) {
             return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
         }
@@ -179,23 +177,33 @@ public class IdeeController {
         if (user == null){
             return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
         }
-        try {
+        System.err.println(ideeRepository.nombreLikeParUtilisateurSurIde(id_user,id_idee));
+
+        if (ideeRepository.nombreLikeParUtilisateurSurIde(id_user,id_idee)==1)
+        {
             idee.setLikes(idee.getLikes()-1);
+
             List<Idee> ideeList = user.getLikedIdee();
+
             ideeList.add(idee);
-            user.getLikedIdee().remove(idee);
+            user.setLikedIdee(ideeList);
+             ideeRepository.nombreUnLikeParUtilisateurSurIde(id_user, id_idee);
+
             userRepository.save(user);
             return new ResponseEntity<>(idee, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("can't unlike idee", HttpStatus.BAD_REQUEST);
+
+        }else {
+            return ResponseEntity.ok().body("Vous ne pouvez pas unlike");
         }
     }
 
+
+
     @ApiOperation(value = "Faire dislike")
     @PostMapping("/dislike/{id_user}/{id_idee}")
-    public ResponseEntity<?> disLikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+    public ResponseEntity<?> dislikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
 
-        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        Idee idee = ideeService.trouverIdeeParID((id_idee));
         if (idee == null) {
             return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
         }
@@ -203,23 +211,26 @@ public class IdeeController {
         if (user == null){
             return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
         }
-        try {
-            idee.setDislikes(1);
+        System.err.println(ideeRepository.nombreDisLikeParUtilisateurSurIde(id_user,id_idee));
+
+        if (ideeRepository.nombreDisLikeParUtilisateurSurIde(id_user,id_idee)>=1)
+        {
+            return ResponseEntity.ok().body("Vous ne pouvez pas aimer");
+        }else {
+            idee.setDislikes(idee.getDislikes()+1);
             List<Idee> ideeList = user.getDislikedIdee();
             ideeList.add(idee);
             user.setDislikedIdee(ideeList);
             userRepository.save(user);
             return new ResponseEntity<>(idee, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("can't dislike idee", HttpStatus.BAD_REQUEST);
         }
     }
 
     @ApiOperation(value = "Faire disunlike")
     @PostMapping("/disunlike/{id_user}/{id_idee}")
-    public ResponseEntity<?> disunlikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
+    public ResponseEntity<?> disunLikeIdee(@PathVariable("id_user") Long id_user, @PathVariable("id_idee") Long id_idee){
 
-        Idee idee = ideeService.trouverIdeeParID(id_idee);
+        Idee idee = ideeService.trouverIdeeParID((id_idee));
         if (idee == null) {
             return new ResponseEntity<>("Idee not found", HttpStatus.NOT_FOUND);
         }
@@ -227,36 +238,24 @@ public class IdeeController {
         if (user == null){
             return new ResponseEntity<>("User not found",  HttpStatus.NOT_FOUND);
         }
-        try {
+        System.err.println(ideeRepository.nombreDisLikeParUtilisateurSurIde(id_user,id_idee));
+
+        if (ideeRepository.nombreDisLikeParUtilisateurSurIde(id_user,id_idee)==1)
+        {
             idee.setDislikes(idee.getDislikes()-1);
+
             List<Idee> ideeList = user.getDislikedIdee();
+
             ideeList.add(idee);
-            user.getDislikedIdee().remove(idee);
+            user.setDislikedIdee(ideeList);
+            ideeRepository.nombreDisUnLikeParUtilisateurSurIde(id_user, id_idee);
+
             userRepository.save(user);
             return new ResponseEntity<>(idee, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("can't disunlike idee", HttpStatus.BAD_REQUEST);
+
+        }else {
+            return ResponseEntity.ok().body("Vous ne pouvez pas disunlike");
         }
     }
-
-
-
-
-
-
-
-   /* @PatchMapping("/etat/{id_idee}")
-    public ResponseMessage SetEtat(@RequestBody Idee idee, @PathVariable("id_idee") Long id_idee) {
-        if (this.ideeRepository.findById(id_idee) == null) {
-
-            ResponseMessage message = new ResponseMessage("Idee n'existe pas !", false);
-            return message;
-        } else {
-
-
-            return this.ideeService.SetEtat(idee, id_idee);
-        }
-
-    }*/
 }
 
